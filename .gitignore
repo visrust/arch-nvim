@@ -3,3 +3,17 @@
 font/
 lua/user/NerdFonts/
 assets/*.mp4
+
+
+# Media
+*.mp4
+*.mkv
+*.gif
+
+# Fonts
+Fonts/
+font/
+lua/user/NerdFonts/
+
+# Generated assets
+assets/
