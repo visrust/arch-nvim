@@ -28,15 +28,3 @@ require('ibl').setup({
         },
     },
 })
-
-vim.api.nvim_create_autocmd("TextChanged", {
-  callback = function()
-    if vim.bo.modifiable then
-      vim.cmd("silent! normal! ==")
-    end
-  end,
-})
-
-vim.opt.autoindent = true
-vim.opt.smartindent = true
-vim.opt.cindent = true
