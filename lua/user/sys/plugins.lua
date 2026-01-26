@@ -94,7 +94,7 @@ require('lazy').setup({
                 'hrsh7th/cmp-nvim-lsp',
             },
         },
-        { 'onsails/lspkind-nvim',        lazy = true },
+        { 'onsails/lspkind-nvim',   lazy = true },
         {
             'SmiteshP/nvim-navic',
             lazy = true,
@@ -367,11 +367,9 @@ require('lazy').setup({
         -- ===========================
         -- Colorschemes (all lazy loaded)
         -- ===========================
-        { 'catppuccin/nvim',             name = 'catppuccin',               lazy = true },
-        { 'EdenEast/nightfox.nvim',      lazy = true },
-        { 'rose-pine/neovim',            name = 'rose-pine',                lazy = true },
-        { 'sainnhe/everforest',          name = 'everforest',               lazy = true },
-        { 'sainnhe/gruvbox-material',    name = 'gruvbox-material-sainnhe', lazy = true },
+        { 'catppuccin/nvim', },
+        { 'EdenEast/nightfox.nvim', },
+        { 'rose-pine/neovim', },
     },
 
     -- ============================
@@ -434,23 +432,23 @@ require('lazy').setup({
         title = '   Lazy Plugin Manager ',
         backdrop = 70,
         icons = {
-            cmd = ' ',
-            config = ' ',
-            event = ' ',
-            ft = ' ',
-            init = '⚙️ ',
-            import = ' ',
-            keys = ' ',
-            lazy = '󰒲 ',
-            loaded = ' ',
-            not_loaded = ' ',
-            plugin = ' ',
-            runtime = ' ',
-            source = ' ',
-            start = ' ',
-            task = ' ',
-            list = { '●', '➜', '★', '‒' },
-        },
+            cmd        = '󰘳 ', -- command / terminal
+            config     = '󰒓 ', -- config / settings
+            event      = '󰚌 ', -- events / hooks
+            ft         = '󰈙 ', -- filetype
+            init       = '󰒓 ', -- init / setup
+            import     = '󰋺 ', -- import / module
+            keys       = '󰌌 ', -- keybindings
+            lazy       = '󰒲 ', -- lazy.nvim (kept)
+            loaded     = '󰄬 ', -- check / loaded
+            not_loaded = '󰄱 ', -- close / disabled
+            plugin     = '󰂖 ', -- plugin / package
+            runtime    = '󰆦 ', -- runtime / engine
+            source     = '󰉋 ', -- source / repo
+            start      = '󰐊 ', -- start / play
+            task       = '󰆕 ', -- task / todo
+            list       = { '󰬪', '󰬜', '󰬐', '󰬅' },
+        }
     },
 })
 
