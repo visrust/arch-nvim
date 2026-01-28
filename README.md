@@ -4,7 +4,11 @@
 
 **🦀 A no-nonsense Neovim distribution for developers who value speed over complexity.**
 
-**Sub-400ms startup • Rust-first LSP • Termux-native • 300+ themes • Your new daily driver.**
+**• Sub-400ms startup.**
+**• Rust-first LSP.**
+**• Termux-native.**
+**• 300+ themes.**
+**• Your new daily driver.**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Neovim](https://img.shields.io/badge/neovim-0.10+-green.svg)](https://neovim.io)
@@ -324,21 +328,18 @@ Press `<Space>` (leader key) to activate **which-key** and see all available map
 
 | Action | Keybinding | Description |
 |--------|------------|-------------|
-| **File Finding** | `<Space>ff` | Find files |
-| **Live Grep** | `<Space>fg` | Search in files |
-| **Buffers** | `<Space>sb` | Snipe buffers (visual) |
-| **File Explorer** | `<Space>e` | Oil.nvim (buffer-style) |
-| **Yazi** | `<Space>y` | Yazi file manager |
-| **LSP Definition** | `gd` | Go to definition |
-| **LSP References** | `gr` | Find references |
+| **File Finding/Grep** | `<Space>f`+ sequence | Find files |
+| **Buffers** | `<Space>sb` or `<Space>fb` | Snipe buffers (visual) |
+| **File Explorer** | `-` to open / `Ctrl-c` to close| Oil.nvim (buffer-style) |
+| **Yazi** | `<Space>yo`+ sequence | Yazi file manager |
+| **LSP References etc** | `gp` + sequence | Go to definition |
 | **LSP Hover** | `K` | Show documentation |
-| **LSP Preview** | `gp` | Preview definition |
-| **Git UI** | `<Space>gg` | Open Lazygit |
-| **Terminal** | `<Ctrl+Space>` | Toggle terminal |
+| **Git UI** | `<Space>gl` | Open Lazygit |
+| **Terminal** | `<Ctrl+\>` | Toggle terminal |
 | **Save Session** | `<Space>ss` | Save session |
 | **Load Session** | `<Space>sl` | Load session |
-| **Undo Tree** | `<Space>u` | Visual undo history |
-| **Auto-save Toggle** | `<Space>as` (2x) | Toggle auto-save |
+| **Undo Tree** | `<Space>ut` | Visual undo history |
+| **Auto-save Toggle** | `U` | Toggle auto-save |
 
 **Full list:** Check `lua/user/sys/mappings.lua` or press `<Space>` in Neovim.
 
