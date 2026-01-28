@@ -346,6 +346,13 @@ require('lazy').setup({
             event = 'VeryLazy',
         },
 
+        {
+            'windwp/nvim-autopairs',
+            dependencies = {
+                'saghen/blink.cmp',
+            }
+        },
+
         -- ===========================
         -- Colorschemes (all lazy loaded)
         -- ===========================
