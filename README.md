@@ -4,11 +4,7 @@
 
 **🦀 A no-nonsense Neovim distribution for developers who value speed over complexity.**
 
-**• Sub-400ms startup.**
-**• Rust-first LSP.**
-**• Termux-native.**
-**• 300+ themes.**
-**• Your new daily driver.**
+**Sub-400ms startup • Rust-first LSP • Termux-native • 300+ themes • Your new daily driver.**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Neovim](https://img.shields.io/badge/neovim-0.10+-green.svg)](https://neovim.io)
