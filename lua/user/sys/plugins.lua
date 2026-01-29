@@ -360,6 +360,7 @@ require('lazy').setup({
         { 'EdenEast/nightfox.nvim', },
         { 'rose-pine/neovim', },
         { 'folke/tokyonight.nvim'},
+        { "ellisonleao/gruvbox.nvim"},
     },
 
     -- ============================
@@ -374,7 +375,7 @@ require('lazy').setup({
 
     install = {
         missing = true,
-        colorscheme = { 'nightfox' }, -- Fallback colorscheme during install
+        colorscheme = { 'catppuccin' }, -- Fallback colorscheme during install
     },
 
     checker = {
@@ -445,14 +446,14 @@ require('lazy').setup({
 -- ===============================
 -- 🌈 Theme adaptation
 -- ===============================
-vim.api.nvim_create_autocmd('ColorScheme', {
-    callback = function()
-        local normal_bg = vim.api.nvim_get_hl(0, { name = 'Normal' }).bg or '#1e1e2e'
-        local accent = vim.api.nvim_get_hl(0, { name = 'String' }).fg or '#89b4fa'
-        vim.api.nvim_set_hl(0, 'LazyButtonActive', { fg = normal_bg, bg = accent, bold = true })
-        vim.api.nvim_set_hl(0, 'LazyProgressDone', { fg = accent })
-    end,
-})
+-- vim.api.nvim_create_autocmd('ColorScheme', {
+--     callback = function()
+--         local normal_bg = vim.api.nvim_get_hl(0, { name = 'Normal' }).bg or '#1e1e2e'
+--         local accent = vim.api.nvim_get_hl(0, { name = 'String' }).fg or '#89b4fa'
+--         vim.api.nvim_set_hl(0, 'LazyButtonActive', { fg = normal_bg, bg = accent, bold = true })
+--         vim.api.nvim_set_hl(0, 'LazyProgressDone', { fg = accent })
+--     end,
+-- })
 
 -- ============================
 -- Batch Control Commands

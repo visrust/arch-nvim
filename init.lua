@@ -5,7 +5,7 @@ vim.g.loaded_perl_provider = 0
 vim.lsp.set_log_level('warn')
 
 _G.map = vim.keymap.set
-
+vim.opt.fillchars:append({ eob = " " })
 -- =========================================================
 -- 1. Safe require helper
 -- =========================================================
@@ -60,7 +60,7 @@ load_stages()
 -- =========================================================
 -- 3. Post-init
 -- =========================================================
-vim.cmd.colorscheme("catppuccin-mocha")
+vim.cmd.colorscheme("gruvbox")
 
 
 local function safe_cursor_line_fix()
