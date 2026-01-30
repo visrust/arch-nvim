@@ -73,7 +73,7 @@ require('lazy').setup({
             version = 'v2.5.0',
             event = { 'BufReadPre', 'BufNewFile' },
         },
-        { 'onsails/lspkind-nvim',   lazy = true },
+        { 'onsails/lspkind-nvim',     lazy = true },
         {
             'SmiteshP/nvim-navic',
             lazy = true,
@@ -86,11 +86,23 @@ require('lazy').setup({
             config = true,
         },
 
-        -- rust 
+        {
+            {
+                'rachartier/tiny-inline-diagnostic.nvim',
+                event = 'VeryLazy',
+                priority = 1000,
+                config = function()
+                    require('tiny-inline-diagnostic').setup()
+                    vim.diagnostic.config({ virtual_text = false }) -- Disable Neovim's default virtual text diagnostics
+                end,
+            }
+        },
+
+        -- rust
 
         {
             'saecki/crates.nvim',
-            event = "Bufread Cargo.toml",
+            event = 'Bufread Cargo.toml',
             tag = 'stable',
             config = function()
                 require('crates').setup()
@@ -360,8 +372,8 @@ require('lazy').setup({
         { 'catppuccin/nvim', },
         { 'EdenEast/nightfox.nvim', },
         { 'rose-pine/neovim', },
-        { 'folke/tokyonight.nvim'},
-        { "ellisonleao/gruvbox.nvim", lazy = true},
+        { 'folke/tokyonight.nvim' },
+        { 'ellisonleao/gruvbox.nvim', lazy = true },
     },
 
     -- ============================
@@ -380,7 +392,7 @@ require('lazy').setup({
     },
 
     rocks = {
-        enabled = false, -- unnecessary for now
+        enabled = false,   -- unnecessary for now
         hererocks = false, -- use system one
     },
 

@@ -10,32 +10,23 @@ require('gruvbox').setup({
     contrast = 'hard',
 })
 
-local function gruvbox_overrides()
-  local hl = vim.api.nvim_get_hl
-  local set = vim.api.nvim_set_hl
-
-  local normal = hl(0, { name = "Normal" })
-
-  set(0, "SignColumn", { link = "Normal" })
-
-  set(0, "DiagnosticSignError", { link = "Error" })
-  set(0, "DiagnosticSignWarn",  { link = "WarningMsg" })
-  set(0, "DiagnosticSignInfo",  { link = "Identifier" })
-  set(0, "DiagnosticSignHint",  { link = "Comment" })
-
-  -- enforce background match
-  for _, g in ipairs({
-    "DiagnosticSignError",
-    "DiagnosticSignWarn",
-    "DiagnosticSignInfo",
-    "DiagnosticSignHint",
-  }) do
-    local fg = hl(0, { name = g }).fg
-    set(0, g, { fg = fg, bg = normal.bg })
-  end
-end
-
 vim.api.nvim_create_autocmd("ColorScheme", {
   pattern = "gruvbox",
-  callback = gruvbox_overrides,
+  callback = function()
+    -- Directly link columns to Normal (Fastest method)
+    local groups = { "SignColumn"}
+    for _, group in ipairs(groups) do
+      vim.api.nvim_set_hl(0, group, { link = "Normal" })
+    end
+
+    -- Clean up Diagnostic Signs
+    -- We link them to their base highlight groups so they inherit the color 
+    -- but stay transparent/consistent with your background.
+    vim.api.nvim_set_hl(0, "DiagnosticSignError", { link = "DiagnosticError" })
+    -- Note: Most modern themes already do this, but if Gruvbox is being 
+    -- stubborn with backgrounds, we force it here:
+    vim.api.nvim_set_hl(0, "DiagnosticSignWarn",  { link = "DiagnosticWarn" })
+    vim.api.nvim_set_hl(0, "DiagnosticSignInfo",  { link = "DiagnosticInfo" })
+    vim.api.nvim_set_hl(0, "DiagnosticSignHint",  { link = "DiagnosticHint" })
+  end,
 })
