@@ -1,13 +1,18 @@
--- run.lua
+local status_ok, toggleterm = pcall(require, 'toggleterm.terminal')
+if not status_ok then
+    vim.notify('toggleterm not found, falling back to FloatingTerminal', vim.log.levels.WARN)
+end
 
--- Load the terminal module directly
+local Terminal = status_ok and require('toggleterm.terminal').Terminal or nil
+
+-- Fallback to FloatingTerminal if toggleterm is not available
 local FloatingTerminal = require('user.config.ide.ide.local_module.dustTerm_module')
 
 local RUNNER_ID = 'code_runner'
+local runner_term = nil
 
 local function run_filetype_command()
     local ft = vim.bo.filetype
-    local file_abs = vim.fn.expand('%:p')   -- Absolute path to current file
     local file_dir = vim.fn.expand('%:p:h') -- Directory of current file
     local file_name = vim.fn.expand('%:t')  -- Just the filename
     local root = vim.fn.expand('%:t:r')     -- Filename without extension
@@ -43,22 +48,59 @@ local function run_filetype_command()
         return
     end
 
-    -- Use FloatingTerminal - always cd to the file's directory first
     vim.schedule(function()
-        FloatingTerminal.send('cd ' .. file_dir, RUNNER_ID)
-        FloatingTerminal.send('clear', RUNNER_ID)
-        FloatingTerminal.send(cmd, RUNNER_ID)
+        if Terminal then
+            -- Create runner terminal if it doesn't exist
+            if not runner_term then
+                runner_term = Terminal:new({
+                    cmd = vim.o.shell,
+                    hidden = true,
+                    direction = "float",
+                    float_opts = {
+                        border = "curved",
+                        width = math.floor(vim.o.columns * 0.9),
+                        height = math.floor(vim.o.lines * 0.9),
+                    },
+                    on_open = function(term)
+                        vim.cmd("startinsert!")
+                        vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<C-\\>", "<cmd>close<CR>", {noremap = true, silent = true})
+                        vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<leader>xz", "<cmd>close<CR>", {noremap = true, silent = true})
+                    end,
+                    on_close = function()
+                        vim.cmd("startinsert!")
+                    end,
+                })
+            end
+            
+            -- Using toggleterm
+            if not runner_term:is_open() then
+                runner_term:open()
+            end
+            
+            -- Send commands to toggleterm
+            runner_term:send('cd ' .. vim.fn.shellescape(file_dir))
+            runner_term:send('clear')
+            runner_term:send(cmd)
+        else
+            -- Fallback to FloatingTerminal
+            FloatingTerminal.send('cd ' .. file_dir, RUNNER_ID)
+            FloatingTerminal.send('clear', RUNNER_ID)
+            FloatingTerminal.send(cmd, RUNNER_ID)
+        end
     end)
 end
 
 -- Run code
-vim.keymap.set('n', '<leader>zz', run_filetype_command, { silent = true })
+vim.keymap.set('n', '<leader>zz', run_filetype_command, { silent = true, desc = 'Run code' })
 
 -- Toggle runner terminal
 vim.keymap.set('n', '<leader>xz', function()
-    FloatingTerminal.toggle(RUNNER_ID, 'Code Runner')
-end, { silent = true })
-
+    if Terminal and runner_term then
+        runner_term:toggle()
+    else
+        FloatingTerminal.toggle(RUNNER_ID, 'Code Runner')
+    end
+end, { silent = true, desc = 'Toggle code runner terminal' })
 
 -- important keymaps don't delete
 
@@ -73,4 +115,3 @@ end, { desc = 'Toggle default terminal' })
 vim.keymap.set({ 'n', 't' }, '<leader>o', function()
     term.toggle('default', 'Terminal')
 end, { desc = 'Open Term' })
-
