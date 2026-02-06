@@ -45,7 +45,7 @@ require('lazy').setup({
         { 'honza/vim-snippets',           lazy = true },
         {
             'L3MON4D3/LuaSnip',
-            version = 'v2.4.1',
+            commit = '5a1e392',
             lazy = true,
             dependencies = {
                 'rafamadriz/friendly-snippets',
@@ -58,7 +58,7 @@ require('lazy').setup({
         -- ===========================
         {
             'saghen/blink.cmp',
-            version = 'v1.8.0',
+            commit = 'b19413d',
             event = 'InsertEnter',
             dependencies = {
                 'rafamadriz/friendly-snippets',
@@ -70,25 +70,36 @@ require('lazy').setup({
         -- ===========================
         {
             'neovim/nvim-lspconfig',
-            version = 'v2.5.0',
+            commit = '5bfcc89',
             event = { 'BufReadPre', 'BufNewFile' },
         },
-        { 'onsails/lspkind-nvim',     lazy = true },
+        { 'onsails/lspkind-nvim',
+            commit = 'c7274c4',
+            lazy = true },
         {
             'SmiteshP/nvim-navic',
+            commit = 'f5eba19',
             lazy = true,
-            dependencies = { 'neovim/nvim-lspconfig' },
+            dependencies = {
+                'neovim/nvim-lspconfig',
+                commit = "5bfcc89",
+            },
         },
         {
             'rmagatti/goto-preview',
+            commit = 'd2d6923',
             event = 'LspAttach',
-            dependencies = { 'rmagatti/logger.nvim' },
+            dependencies = {
+                'rmagatti/logger.nvim',
+                commit = '63dd10c',
+            },
             config = true,
         },
         {
             'folke/trouble.nvim',
+            commit = 'bd67efe',
             opts = {}, -- for default options, refer to the configuration section for custom setup.
-            event = "BufReadPre",
+            event = 'BufReadPre',
             keys = {
                 {
                     '<leader>tt',
@@ -100,6 +111,7 @@ require('lazy').setup({
 
         {
             'saecki/crates.nvim',
+            commit = 'afcd1cc',
             event = 'Bufread Cargo.toml',
             tag = 'stable',
             config = function()
@@ -112,6 +124,7 @@ require('lazy').setup({
         -- ===========================
         {
             'stevearc/conform.nvim',
+            commit = 'c2526f1',
             event = 'BufWritePre',
         },
 
@@ -120,16 +133,20 @@ require('lazy').setup({
         -- ===========================
         {
             'mfussenegger/nvim-dap',
-            version = '0.10.0',
+            commit = '6a5bba0',
             cmd = { 'DapContinue', 'DapToggleBreakpoint', 'DapStepOver', 'DapStepInto', 'DapStepOut' },
         },
         {
             'rcarriga/nvim-dap-ui',
-            dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
+            commit = 'cf91d5e',
+            dependencies = { 'mfussenegger/nvim-dap',
+                'nvim-neotest/nvim-nio'
+            },
             cmd = { 'DapContinue', 'DapToggleBreakpoint' },
         },
         {
             'theHamsta/nvim-dap-virtual-text',
+            commit = 'fbdb48c',
             dependencies = { 'mfussenegger/nvim-dap' },
             event = 'LspAttach',
         },
@@ -139,36 +156,42 @@ require('lazy').setup({
         -- ===========================
         {
             'nvim-lualine/lualine.nvim',
+            commit = '47f91c4',
             event = 'VeryLazy',
             dependencies = { 'nvim-tree/nvim-web-devicons' },
         },
         {
-            'willothy/nvim-cokeline'
+            'willothy/nvim-cokeline',
+            commit = '9fbed13',
         },
         {
             'lukas-reineke/indent-blankline.nvim',
             main = 'ibl',
-            version = 'v3.9.0',
+            commit = '005b560',
             event = { 'BufReadPost', 'BufNewFile' },
         },
         {
             'goolord/alpha-nvim',
+            commit = '3979b01',
             event = 'VimEnter',
-            dependencies = { 'MaximilianLloyd/ascii.nvim' },
+            dependencies = {
+                'MaximilianLloyd/ascii.nvim',
+                commit = '70783fe',
+            },
         },
         {
             'stevearc/dressing.nvim',
-            version = 'v3.1.1',
+            commit = '3a45525',
             event = 'VeryLazy',
         },
         {
             'rcarriga/nvim-notify',
-            version = 'v3.15.0',
+            commit = 'a3020c2',
             event = 'VeryLazy',
         },
         {
             'beauwilliams/focus.nvim',
-            version = 'v1.0.2',
+            commit = '4135f97',
             cmd = { 'FocusSplitNicely', 'FocusSplitCycle', 'FocusToggle' },
         },
 
@@ -177,7 +200,7 @@ require('lazy').setup({
         -- ===========================
         {
             'nvim-treesitter/nvim-treesitter',
-            version = 'v0.10.0',
+            commit = '42fc28b',
             build = ':TSUpdate',
             event = { 'BufReadPost', 'BufNewFile' },
         },
@@ -187,7 +210,7 @@ require('lazy').setup({
         -- ===========================
         {
             'stevearc/oil.nvim',
-            version = 'v2.15.0',
+            commit = '975a77c',
             dependencies = { 'echasnovski/mini.icons' },
         },
 
@@ -245,6 +268,7 @@ require('lazy').setup({
 
         {
             'kdheepak/lazygit.nvim',
+            commit = 'a04ad0d',
             Lazy = false,
             cmd = {
                 'LazyGit',
@@ -263,13 +287,13 @@ require('lazy').setup({
         -- ===========================
         {
             'kylechui/nvim-surround',
-            version = 'v3.1.7',
+            commit = 'fcfa7e0',
             event = 'VeryLazy',
             config = true,
         },
         {
             'numToStr/Comment.nvim',
-            version = 'v0.8.0',
+            commit = 'e51f2b1',
             keys = {
                 { 'gcc', mode = 'n',          desc = 'Comment line' },
                 { 'gc',  mode = { 'n', 'v' }, desc = 'Comment' },
@@ -278,7 +302,7 @@ require('lazy').setup({
         {
             {
                 'akinsho/toggleterm.nvim',
-                version = '*',
+                commit = '50ea089',
                 lazy = true,
                 config = true
             },
@@ -294,7 +318,6 @@ require('lazy').setup({
         {
             'folke/which-key.nvim',
             commit = '3aab214',
-            version = 'v3.17.0',
             event = 'VeryLazy',
         },
         {
@@ -309,21 +332,14 @@ require('lazy').setup({
         },
         {
             'gbprod/yanky.nvim',
+            commit = '29f31f7',
             event = 'VeryLazy',
         },
         {
             'nvzone/showkeys',
+            commit = 'cb0a502',
             event = 'VeryLazy'
         },
-
-        -- ===========================
-        -- Advanced Features
-        -- ===========================
-        {
-            'stevearc/overseer.nvim',
-            cmd = { 'OverseerRun', 'OverseerToggle', 'OverseerInfo' },
-        },
-
         -- ===========================
         -- AI Completion
         -- ===========================
@@ -347,7 +363,7 @@ require('lazy').setup({
         -- ===========================
         {
             'stevearc/resession.nvim',
-            version = 'v1.2.1',
+            commit = 'cc819b0',
             lazy = true,
         },
 
@@ -356,16 +372,20 @@ require('lazy').setup({
         -- ===========================
         {
             'nvim-mini/mini.indentscope',
+            commit = '0308f94',
             event = 'BufReadPost',
         },
         {
             'nvim-mini/mini.notify',
+            commit = '29ec27f',
         },
 
         {
             'windwp/nvim-autopairs',
+            commit = '59bce2e',
             dependencies = {
                 'saghen/blink.cmp',
+                commit = 'b19413d',
             },
             lazy = true,
         },
@@ -373,11 +393,22 @@ require('lazy').setup({
         -- ===========================
         -- Colorschemes (all lazy loaded)
         -- ===========================
-        { 'catppuccin/nvim', },
-        { 'EdenEast/nightfox.nvim', },
-        { 'rose-pine/neovim', },
-        { 'folke/tokyonight.nvim' },
-        { 'ellisonleao/gruvbox.nvim', lazy = true },
+        {
+            'catppuccin/nvim',
+            commit = 'beaf41a',
+        },
+        {
+            'EdenEast/nightfox.nvim',
+            commit = 'ba47d4b',
+        },
+        {
+            'rose-pine/neovim',
+            commit = 'cf2a288',
+        },
+        {
+            'folke/tokyonight.nvim',
+            commit = '5da1b76',
+        },
     },
 
     -- ============================
