@@ -1,11 +1,11 @@
 require("user.config.ide.ide.local_module.autosave_module").setup({
     enabled = true,
     allow = { "all" },
-    -- disallow = { "c", "cpp" },
+    disallow = { "oil", "terminal", "undotree" },
     speed = 100, -- ms delay
     mode = "n",
 
-    -- NEW: Advanced options
+    -- Warn : Keep these untouched.
     format_on_save = false,      -- Auto-format with Conform/LSP
     reload_diagnostics = false,   -- I warn you to not use it otherwise you will be waiting 2-3 seconds for diagonastic refresh
     debounce = true,             -- Prevent rapid-fire saves
