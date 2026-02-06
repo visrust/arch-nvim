@@ -4,7 +4,7 @@
 
 **🦀 A blazing-fast Neovim distribution built for speed and simplicity.**
 
-**Sub-400ms startup • 63 plugins • 20 LSP servers • 300+ themes • Zero bloat.**
+**Sub-400ms startup • 63 plugins • 20 LSP servers • 5 theme collections • Zero bloat.**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Neovim](https://img.shields.io/badge/neovim-0.10+-green.svg)](https://neovim.io)
@@ -24,11 +24,12 @@ DustNvim is a **production-ready IDE** that respects your time. No configuration
 
 | Feature | DustNvim | Typical Configs |
 |---------|----------|-----------------|
-| **Startup** | <400ms on Snapdragon 4 Gen 1 | 2-5 seconds |
+| **Startup** | <400ms (std/fs.rs on Termux) | 2-5 seconds |
 | **Mobile** | Built & tested on Termux | Often broken |
-| **Themes** | 300+ curated colorschemes | 60-100 |
+| **Themes** | 5 curated collections | Scattered individual themes |
 | **Plugins** | 63 carefully selected | 100+ bloat |
 | **Rust** | Pre-configured rust-analyzer | Manual setup |
+| **LSP** | Manual control, no Mason | Auto-installed dependencies |
 | **Philosophy** | Opinionated, ready to use | Configure everything |
 
 **Perfect for:**
@@ -42,13 +43,20 @@ DustNvim is a **production-ready IDE** that respects your time. No configuration
 
 ## ✨ Features
 
+### **⚡ Performance Note**
+
+> **Termux (Mobile):** ~300ms for std/fs.rs file loading. Some lag expected due to mobile CPU constraints.  
+> **Desktop:** Blazing fast startup (<100ms on modern CPUs). All features run smoothly.
+
+DustNvim is optimized for both, but desktop will always be faster. Termux configs include specific optimizations (disabled proc macros, reduced cargo features, etc.).
+
 ### **🔥 Core Strengths**
 
-- **⚡ Blazing Fast** — Sub-400ms startup with staged plugin loading
-- **🦀 Rust Excellence** — Zero-config rust-analyzer with instant diagnostics
+- **⚡ Blazing Fast** — Sub-400ms startup on desktop; ~300ms for std/fs.rs on Termux
+- **🦀 Rust Excellence** — Termux-optimized rust-analyzer with instant diagnostics
 - **📱 Termux Native** — Tested and optimized for mobile development
-- **🎨 Theme Paradise** — 300+ colorschemes (Catppuccin, Rose Pine, Tokyo Night, Nightfox, Base16, Gruvbox)
-- **🛠️ LSP Ready** — 20 pre-configured language servers across 6 categories
+- **🎨 Curated Themes** — 5 popular collections (Catppuccin, Rose Pine, Tokyo Night, Nightfox, Gruvbox)
+- **🛠️ LSP Ready** — 20 pre-configured language servers across 6 categories (manual binary management)
 - **💡 Smart Completion** — Blink.cmp with snippet support
 - **📁 Dual File Navigation** — Oil.nvim (buffer-style) + Yazi (visual manager)
 
@@ -73,8 +81,8 @@ DustNvim is a **production-ready IDE** that respects your time. No configuration
 
 ### **🎨 UI Polish**
 
-- **Nightfox Default Theme** — Beautiful dark theme out of the box
-- **300+ Themes** — Switch instantly with `:SGT <theme>`
+- **Tokyo Night Default** — Beautiful Tokyo Night theme out of the box
+- **5 Theme Collections** — Catppuccin, Rose Pine, Tokyo Night, Nightfox, Gruvbox variants
 - **Smart Statusline** — File info, LSP status, git branch (lualine)
 - **Buffer Tabline** — Visual buffer management (cokeline)
 - **Indent Guides** — Rainbow indentation (indent-blankline)
@@ -178,44 +186,51 @@ DustNvim is a **production-ready IDE** that respects your time. No configuration
 
 ## 🚀 Installation
 
-### Quick Start (30 seconds)
+### Recommended: Stable Release (v1.0.0)
 
 ```bash
-# Clone DustNvim
-mkdir -p ~/.config/nv && cd ~/.config/nv
-git clone --depth=1 https://github.com/visrust/DustNvim.git .
+# Clone stable version
+mkdir -p ~/.config/dusn && cd ~/.config/dusn
+git clone --branch v1.0.0 --depth 1 https://github.com/visrust/dustnvim.git .
 
 # First launch (auto-installs plugins)
-NVIM_APPNAME=nv nvim
-```
-
-**Stable Release:**
-```bash
-mkdir -p ~/.config/nv && cd ~/.config/nv
-git clone --branch v1.0.0 --depth 1 https://github.com/visrust/dustnvim.git .
+NVIM_APPNAME=dusn nvim
 ```
 
 **First Launch:** Lazy.nvim auto-installs all plugins (1-2 minutes). Restart Neovim after completion.
+
+### Unstable (Not Recommended)
+
+> ⚠️ **Deprecated:** Continuous updates may cause breaking changes. Only use if you need bleeding-edge features.
+
+```bash
+# Clone main branch (unstable)
+mkdir -p ~/.config/dusn && cd ~/.config/dusn
+git clone --depth=1 https://github.com/visrust/DustNvim.git .
+
+# Launch
+NVIM_APPNAME=dusn nvim
+```
 
 ### Add Alias
 
 ```bash
 # Bash
-echo "alias nv='NVIM_APPNAME=nv nvim'" >> ~/.bashrc && source ~/.bashrc
+echo "alias dusn='NVIM_APPNAME=dusn nvim'" >> ~/.bashrc && source ~/.bashrc
 
 # Zsh
-echo "alias nv='NVIM_APPNAME=nv nvim'" >> ~/.zshrc && source ~/.zshrc
+echo "alias dusn='NVIM_APPNAME=dusn nvim'" >> ~/.zshrc && source ~/.zshrc
 
 # Fish
-echo "alias nv='NVIM_APPNAME=nv nvim'" >> ~/.config/fish/config.fish && source ~/.config/fish/config.fish
+echo "alias dusn='NVIM_APPNAME=dusn nvim'" >> ~/.config/fish/config.fish && source ~/.config/fish/config.fish
 ```
 
-**Launch:** Type `nv` in your terminal
+**Launch:** Type `dusn` in your terminal
 
 ### Uninstall
 
 ```bash
-rm -rf ~/.config/nv/ ~/.local/share/nv/ ~/.local/state/nv/ ~/.cache/nv/
+rm -rf ~/.config/dusn/ ~/.local/share/dusn/ ~/.local/state/dusn/ ~/.cache/dusn/
 ```
 
 ---
@@ -268,22 +283,59 @@ brew install bat git-delta node python
 
 ### **Language Tools**
 
-Most LSP servers install via **Mason** (`:Mason` in Neovim):
+LSP servers are configured via nvim-lspconfig. **You install the binaries yourself** (no Mason):
 
 ```bash
-# Rust (via rustup)
+# Rust (via rustup - recommended)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup component add rust-analyzer rustfmt clippy
+
+# C/C++
+# Install clangd from your package manager
+
+# Python
+pip install pyright black isort
 
 # Go
 go install golang.org/x/tools/gopls@latest
 
-# Python formatters
-pip install black isort
+# Web (TypeScript/JavaScript)
+npm install -g typescript typescript-language-server
 
-# Web (Prettier)
-npm install -g prettier
+# Lua
+# Install lua-language-server from your package manager
+
+# Others
+# Install LSP binaries manually as needed
 ```
+
+**Example rust-analyzer config** (Termux-optimized):
+```lua
+-- lua/user/config/server/LowLevel/rust_analyzer.lua
+local lspconfig = require("lspconfig")
+
+lspconfig.rust_analyzer.setup({
+    flags = {
+        debounce_text_changes = 300,
+    },
+    settings = {
+        ["rust-analyzer"] = {
+            checkOnSave = {
+                enable = true,
+                command = "clippy",
+            },
+            cargo = {
+                allFeatures = false,
+                buildScripts = { enable = false },
+            },
+            procMacro = { enable = false }, -- Termux optimization
+            diagnostics = { enable = true },
+        },
+    },
+})
+```
+
+**You control your toolchain.** Install binaries when you need them.
 
 ---
 
@@ -291,42 +343,125 @@ npm install -g prettier
 
 ### Theme Switching
 
-**300+ themes available:**
+**5 theme collections with multiple variants:**
 
 ```vim
-:SGT catppuccin-mocha
-:SGT rose-pine
-:SGT tokyonight-night
-:SGT nightfox
-:SGT base16-gruvbox-dark-hard
+:SGT catppuccin-mocha       " Catppuccin variants
+:SGT rose-pine              " Rose Pine
+:SGT tokyonight-night       " Tokyo Night variants
+:SGT nightfox               " Nightfox family
+:SGT gruvbox                " Gruvbox
 ```
 
-**Browse:** `:SGT <Tab>` to cycle through themes
+**Available collections:**
+- **Catppuccin** — Mocha, Latte, Frappé, Macchiato
+- **Nightfox** — Nightfox, Dawnfox, Dayfox, Duskfox, Nordfox, Terafox, Carbonfox
+- **Rose Pine** — Main, Moon, Dawn
+- **Tokyo Night** — Night, Storm, Day, Moon
+- **Gruvbox** — Dark, Light variants
 
-### Essential Keybindings
+**Browse:** `:SGT <Tab>` to cycle through available themes
 
-Press `<Space>` to see all mappings via Which-Key!
+### Keybindings Reference
 
-| Action | Key | Description |
-|--------|-----|-------------|
-| **Find Files** | `<Space>f` + seq | FzfLua finder |
-| **File Explorer** | `-` | Oil.nvim (buffer-style) |
-| **Visual Manager** | `<Space>yo` + seq | Yazi file manager |
-| **Leap Forward** | `m` + 2 chars | Jump to location |
-| **Leap Backward** | `M` + 2 chars | Jump backward |
-| **LSP Hover** | `K` | Show documentation |
-| **Go to Definition** | `gpd` | Preview definition |
-| **Go to References** | `gpr` | Preview references |
-| **Lazygit** | `<Space>gl` | Git UI |
-| **Terminal** | `<C-\>` | Toggle terminal |
-| **Run Code** | `<Space>zz` | Execute current file |
-| **Undo Tree** | `<Space>ut` | Visual undo history |
-| **Save Session** | `<Space>ss` | Save workspace |
-| **Load Session** | `<Space>sl` | Restore workspace |
-| **Session Info** | `<Space>si` | Session details |
-| **Help Tags** | `<Space>hf` | Search help docs |
+**Press `<Space>` (leader key) to activate Which-Key and see all mappings!**
 
-**Full reference:** 39 keybindings documented in `02_KEYBINDINGS.md`
+> **Total:** 39 keybindings across normal, visual, and terminal modes
+
+#### **Core Navigation**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `m` + 2 chars | `n` | Leap forward to location |
+| `M` + 2 chars | `n` | Leap backward |
+| `gm` + 2 chars | `n` | Leap from window (cross-window jump) |
+| `<Tab>` | `n` | Next buffer |
+| `-` | `n` | Open Oil.nvim file explorer |
+| `<Space>yo` + seq | `n` | Yazi visual file manager |
+| `<Space>sb` | `n` | Snipe buffers (visual picker) |
+
+#### **LSP & Code Preview**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `K` | `n` | LSP hover documentation |
+| `gpd` | `n` | Preview definition |
+| `gpt` | `n` | Preview type definition |
+| `gpi` | `n` | Preview implementation |
+| `gpD` | `n` | Preview declaration |
+| `gpr` | `n` | Preview references |
+| `gP` | `n` | Close all preview windows |
+
+#### **Fuzzy Finding & Search**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<Space>f` + seq | `n` | FzfLua file finder |
+| `<Space>hf` | `n` | Help tags (FzfLua) |
+
+#### **Editing & Text Manipulation**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>rs` | `n` | Range substitute |
+| `<leader>rs` | `v` | Replace in selection |
+| `<leader>ra` | `n` | Replace in whole file |
+| `<leader>rm` | `n` | Replace in matching lines |
+| `<leader>m` | `v` | Move block to line |
+| `<C-x>s` | `n` | Spelling suggestions |
+
+#### **Advanced Replace Operations**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>rrc` | `n` | Replace operation (custom) |
+| `<leader>rrf` | `n` | Replace operation (custom) |
+| `<leader>rrb` | `n` | Replace operation (custom) |
+| `<leader>rrl` | `n` | Replace operation (custom) |
+| `<leader>rsl` | `n` | Replace operation (custom) |
+| `<leader>rsv` | `v` | Replace operation (custom) |
+| `<leader>rsr` | `n` | Replace operation (custom) |
+| `<leader>rsm` | `n` | Replace operation (custom) |
+| `<leader>rsa` | `n` | Replace operation (custom) |
+
+#### **LSP Management**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>llp` | `n` | LSP operation (custom) |
+| `<leader>llu` | `n` | LSP operation (custom) |
+| `<leader>lls` | `n` | LSP operation (custom) |
+| `<leader>lsi` | `n` | LSP operation (custom) |
+| `<leader>lsl` | `n` | LSP operation (custom) |
+| `<leader>lsr` | `n` | LSP operation (custom) |
+
+#### **Diagnostics**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>dr` | `n` | Force diagnostic refresh |
+| `<leader>dd` | `n` | Show diagnostic debug info |
+
+#### **Tools & Utilities**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<Space>zz` | `n` | Run code (execute current file) |
+| `<Space>gl` | `n` | Lazygit UI |
+| `<C-\>` | `n` | Toggle terminal |
+| `<M-Space>` | `t` | Enter terminal normal mode |
+| `<Space>ut` | `n` | Toggle Undotree (visual undo) |
+| `<leader>cr` | `n` | Check file changes / reload |
+
+#### **Sessions**
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<Space>ss` | `n` | Save session |
+| `<Space>sl` | `n` | Load session |
+| `<Space>si` | `n` | Session info |
+
+> **Note:** Many bindings in `lua/user/other/keymaps/general.lua` are custom workflow helpers. Explore with Which-Key (`<Space>`) or check the source files for details.
 
 ### Adding LSP Servers
 
@@ -357,7 +492,7 @@ Auto-loads on restart!
 DustNvim uses **staged loading** for optimal performance:
 
 ```
-nv/
+dusn/
 ├── init.lua                    # Entry point
 ├── lazy-lock.json              # Plugin versions (63 plugins)
 └── lua/user/
@@ -487,7 +622,6 @@ Contributions welcome! Fix bugs, add servers, improve docs—all help appreciate
 
 ```vim
 :checkhealth           " Diagnose issues
-:Mason                 " Install LSP/formatters
 :Lazy                  " Manage plugins
 :SGT <theme>           " Switch colorscheme
 :help <topic>          " Built-in help
@@ -513,7 +647,7 @@ Built with incredible open-source tools:
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) — Syntax
 - **60+ other plugins** — See `lazy-lock.json`
 
-Special thanks to theme creators: Catppuccin, Rose Pine, Tokyo Night, Nightfox, Base16 teams.
+Special thanks to theme creators: Catppuccin, Rose Pine, Tokyo Night, Nightfox, and Gruvbox teams.
 
 ---
 
