@@ -20,9 +20,9 @@ local function run_filetype_command()
     local cmd = nil
 
     if ft == 'rust' then
-        cmd = 'time cargo run'
+        cmd = 'cargo run'
     elseif ft == 'zig' then
-        cmd = 'cd ' .. file_dir .. ' && time zig build-exe ' .. file_name
+        cmd = 'cd ' .. file_dir .. ' &&  zig build-exe ' .. file_name
     elseif ft == 'python' then
         cmd = 'python3 ' .. file_name
     elseif ft == 'lua' then
@@ -32,7 +32,7 @@ local function run_filetype_command()
     elseif ft == 'cpp' then
         cmd = 'g++ ' .. file_name .. ' -o ' .. root .. ' && ./' .. root
     elseif ft == 'go' then
-        cmd = 'go run ' .. file_name
+        cmd = 'go run .'
     elseif ft == 'java' then
         cmd = 'javac ' .. file_name .. ' && java ' .. root
     elseif ft == 'javascript' then
