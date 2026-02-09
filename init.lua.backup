@@ -60,7 +60,7 @@ load_stages()
 -- =========================================================
 -- 3. Post-init
 -- =========================================================
-vim.cmd.colorscheme('tokyonight-night')
+vim.cmd.colorscheme('tokyonight-day')
 
 
 local function safe_cursor_line_fix()
@@ -104,52 +104,62 @@ if not ok then
     vim.notify('CursorLine fix failed: ' .. tostring(err), vim.log.levels.WARN)
 end
 
-
-vim.api.nvim_create_autocmd('ColorScheme', {
-    callback = function()
-        vim.schedule(function()
-            local ok = pcall(safe_cursor_line_fix)
-            if not ok then
-                -- Silently fail, don't spam user
-            end
-        end)
-    end,
-})
 local function apply_diag_hls()
-    -- Unnecessary: no underline, standout, pure white
-    vim.api.nvim_set_hl(0, 'DiagnosticUnnecessary', {
-        fg = "#ffffff",
-        standout = true,
-        nocombine = true,
+    vim.api.nvim_create_autocmd('ColorScheme', {
+        callback = function()
+            vim.schedule(function()
+                local ok = pcall(safe_cursor_line_fix)
+                if not ok then
+                    -- Silently fail, don't spam user
+                end
+            end)
+        end,
     })
 
-    -- Explicitly ensure no underline
+    -- Base group
+    vim.api.nvim_set_hl(0, 'DiagnosticUnnecessary', { link = 'DiagnosticWarn' })
+
+    -- Explicitly disable underline
     vim.api.nvim_set_hl(0, 'DiagnosticUnderlineUnnecessary', {
-        underline = false,
+        underline = true,
+        nocombine = true,
         undercurl = false,
         sp = 'NONE',
-        nocombine = true,
     })
 
     local function bold_diag_underline(name, target)
+        local hl = vim.api.nvim_get_hl(0, { name = target, link = false })
+
         vim.api.nvim_set_hl(0, name, {
-            fg = "#ffffff",
-            sp = "#ffffff",
+            fg = hl.fg,
+            sp = hl.fg,
             bold = true,
-            underline = false,
-            standout = true,
-            nocombine = true,
+            underline = true,
+            -- standout = true,
         })
     end
 
+    -- Apply ONLY to severities that should underline
     bold_diag_underline('DiagnosticUnderlineError', 'DiagnosticError')
-    bold_diag_underline('DiagnosticUnderlineWarn',  'DiagnosticWarn')
-    bold_diag_underline('DiagnosticUnderlineInfo',  'DiagnosticInfo')
-    bold_diag_underline('DiagnosticUnderlineHint',  'DiagnosticHint')
+    bold_diag_underline('DiagnosticUnderlineWarn', 'DiagnosticWarn')
+    bold_diag_underline('DiagnosticUnderlineInfo', 'DiagnosticInfo')
+    bold_diag_underline('DiagnosticUnderlineHint', 'DiagnosticHint')
 end
 
 vim.api.nvim_create_autocmd('ColorScheme', {
     callback = apply_diag_hls,
 })
 
+-- apply once at startup
 apply_diag_hls()
+
+
+-- Sementics off 
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
+    end,
+})

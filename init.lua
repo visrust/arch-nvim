@@ -60,7 +60,7 @@ load_stages()
 -- =========================================================
 -- 3. Post-init
 -- =========================================================
-vim.cmd.colorscheme('tokyonight-night')
+vim.cmd.colorscheme('catppuccin-latte')
 
 
 local function safe_cursor_line_fix()
@@ -135,7 +135,7 @@ local function apply_diag_hls()
             sp = hl.fg,
             bold = true,
             underline = true,
-            standout = true,
+            -- standout = true,
         })
     end
 
@@ -152,3 +152,14 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 
 -- apply once at startup
 apply_diag_hls()
+
+
+-- Sementics off 
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
+    end,
+})

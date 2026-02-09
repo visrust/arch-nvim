@@ -11,6 +11,9 @@ o.smartindent = true
 o.textwidth=0
 vim.opt.softtabstop = 4
 vim.opt.clipboard = "" 
+vim.cmd("syntax on")             -- Tells Neovim to use Regex highlighting
+vim.cmd("filetype plugin on")    -- Tells Neovim to load language-specific settings
+
 vim.cmd("filetype plugin indent on")
 -- Minimal custom tabline: show current file + indicator for more tabs
 vim.o.showtabline = 2
