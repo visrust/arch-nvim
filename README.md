@@ -1,8 +1,8 @@
-# 🦀 DustNvim
+# 🦀 Arch Nvim
 
 <div align="center">
 
-### **🦀 Dust Nvim is a Neovim configuration that aims to provide an IDE-like experience while preserving Neovim’s minimalism. Supports multiple languages out of the box, promotes a cleaner code culture, and enables smarter, less noisy coding.**
+### **🦀 Arch Nvim is a Neovim configuration that aims to provide an IDE-like experience while preserving Neovim’s minimalism. Supports multiple languages out of the box, promotes a cleaner code culture, and enables smarter, less noisy coding.**
 
 *Stop configuring. Start coding.*
 
@@ -43,14 +43,14 @@
 
 ```bash
 # Clone it
-mkdir -p ~/.config/dn && cd ~/.config/dn
-git clone --branch v1.6 --depth=1 https://github.com/visrust/dustnvim.git .
+mkdir -p ~/.config/archn && cd ~/.config/archn
+git clone --branch v1.9 --depth=1 https://github.com/visrust/arch-nvim.git .
 
 # Launch it
-NVIM_APPNAME=dn nvim
+NVIM_APPNAME=archn nvim
 
 # Optional: Add alias
-echo "alias dn='NVIM_APPNAME=dn nvim'" >> ~/.bashrc && source ~/.bashrc
+echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
 ```
 
 **That's it.** Plugins auto-install on first launch. Restart once and you're ready.
@@ -126,9 +126,9 @@ Rust • C/C++ • Python • Go • TS/JS • Lua • Zig • Bash • Markdown
 
 ---
 
-## 🎯 Why DustNvim?
+## 🎯 Why Arch Nvim?
 
-| DustNvim | Typical Configs |
+| Arch | Typical Configs |
 |----------|-----------------|
 | ⚡ <400ms startup | 🐌 2-5 seconds |
 | 📱 Termux tested | ❌ Often broken |
@@ -242,7 +242,7 @@ Found a bug? Want to add a feature? PRs welcome!
 <summary><b>🗑️ Uninstall</b></summary>
 
 ```bash
-rm -rf ~/.config/dn/ ~/.local/share/dn/ ~/.local/state/dn/ ~/.cache/dn/
+rm -rf ~/.config/archn/ ~/.local/share/archn/ ~/.local/state/archn/ ~/.cache/archn/
 ```
 
 </details>
@@ -255,6 +255,6 @@ rm -rf ~/.config/dn/ ~/.local/share/dn/ ~/.local/state/dn/ ~/.cache/dn/
 
 **Stop configuring. Start coding.**
 
-[⭐ Star on GitHub](https://github.com/visrust/DustNvim) • [🐛 Report Issues](https://github.com/visrust/DustNvim/issues) • [💬 Discussions](https://github.com/visrust/DustNvim/discussions)
+[⭐ Star on GitHub](https://github.com/visrust/arch-nvim) • [🐛 Report Issues](https://github.com/visrust/arch-nvim/issues) • [💬 Discussions](https://github.com/visrust/arch-nvim/discussions)
 
 </div>
