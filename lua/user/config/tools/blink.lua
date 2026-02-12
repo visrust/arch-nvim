@@ -87,13 +87,13 @@ require('blink.cmp').setup({
                 max_width = 40,
                 max_height = 40,
                 border = 'rounded',
-                winblend = 25,
+                winblend = 0,
                 scrollbar = true,
 
-                direction_priority = {
-                    menu_north = { 'e' },
-                    menu_south = { 'e' },
-                },
+                -- direction_priority = {
+                --     menu_north = { 'e' },
+                --     menu_south = { 'e' },
+                -- },
             },
         },
 

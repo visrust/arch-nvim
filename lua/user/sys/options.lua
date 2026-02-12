@@ -18,9 +18,10 @@ vim.cmd("filetype plugin indent on")
 -- Minimal custom tabline: show current file + indicator for more tabs
 vim.o.showtabline = 2
 
-vim.opt.timeoutlen = 200
+vim.opt.timeout = true
+vim.opt.timeoutlen = 0
 vim.opt.updatetime = 100
-vim.opt.ttimeoutlen = 10
+vim.opt.ttimeoutlen = 0
 vim.opt.lazyredraw = false -- keep off
 vim.opt.ttyfast = true
 

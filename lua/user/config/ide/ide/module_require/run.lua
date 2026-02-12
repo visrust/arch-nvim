@@ -5,9 +5,6 @@ end
 
 local Terminal = status_ok and require('toggleterm.terminal').Terminal or nil
 
--- Fallback to FloatingTerminal if toggleterm is not available
-local FloatingTerminal = require('user.config.ide.ide.local_module.dustTerm_module')
-
 local RUNNER_ID = 'code_runner'
 local runner_term = nil
 
@@ -105,17 +102,3 @@ vim.keymap.set('n', '<leader>xz', function()
         FloatingTerminal.toggle(RUNNER_ID, 'Code Runner')
     end
 end, { silent = true, desc = 'Toggle code runner terminal' })
-
--- important keymaps don't delete
-
-local term = require('user.config.ide.ide.local_module.dustTerm_module')
-_G.FloatingTerminal = term
-
--- Default terminal toggle
-vim.keymap.set({ 'n', 't' }, '<C-\\>', function()
-    term.toggle('default', 'Terminal')
-end, { desc = 'Toggle default terminal' })
-
-vim.keymap.set({ 'n', 't' }, '<leader>o', function()
-    term.toggle('default', 'Terminal')
-end, { desc = 'Open Term' })
