@@ -16,7 +16,7 @@
 
 ---
 
-## 📸 See It in Action
+## 🖥️The everywhere IDE 
 
 <div align="center">
 
@@ -29,31 +29,56 @@
 ![Screenshot_20260208_090137](https://github.com/user-attachments/assets/1a4a98f0-a725-447e-9415-724f756ec144)
 ![Screenshot_20260208_085632](https://github.com/user-attachments/assets/eee31bca-5a46-4fdd-87e0-0b7a89a8a2ea)
 
-<details>
-<summary><b>👉 View More Screenshots</b></summary>
-
-
-</details>
-
 </div>
 
 ---
+## Download JetBrains Nerd font 
 
-## 🚀 Quick Start
+```sh 
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
+```
+
+### Open it 
+```sh 
+tar -xf JetBrainsMono.tar.xz
+```
+
+### Setup for termux 
+
+```sh 
+mkdir -p ~/.termux/
+mv ~/.termux/font.ttf ~/.termux/prev_font.ttf.backup
+cp JetBrainsMonoNerdFont-Medium.ttf ~/.termux/font.ttf
+termux-reload-settings
+```
+
+> [TIP!]
+> Check the guide of changing font for your soecific linux.
+
+---
+
+## 🚀 Quick stable download
+
+> [WARN!]
+> Without clang or gcc the treesitters wont compile 
+```sh 
+apt install clang 
+```
 
 ```bash
 # Clone it
 mkdir -p ~/.config/archn && cd ~/.config/archn
 git clone --branch v2.0.1 --depth=1 https://github.com/visrust/arch-nvim.git .
 
+echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
+echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.zshrc && source ~/.zshrc
+
 # Launch it
 NVIM_APPNAME=archn nvim
-
-# Optional: Add alias
-echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
 ```
 
-**That's it.** Plugins auto-install on first launch. Restart once and you're ready.
+> [IMPORTANT!]
+> You will need avout 200 mbs of mobile data to setup the plugins. Don't worry once setuped you can every time clone the same binary to use in other arch-nvim based configurations by copying ~/.local/share/nvim/lazy/
 
 ---
 
@@ -64,7 +89,7 @@ echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
 <td width="50%">
 
 ### ⚡ **Speed**
-- **<400ms** startup on desktop
+- **Less than 250ms** startup on desktop
 - **~300ms** on Termux (mobile)
 - **63 plugins**, zero bloat
 - Lazy loading done right
@@ -72,11 +97,14 @@ echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
 </td>
 <td width="50%">
 
-### 🦀 **Rust-First**
-- rust-analyzer pre-configured
-- Termux-optimized settings
-- Instant diagnostics
-- Clippy integration
+### 🦀 **Modern-Language-First**
+- rust-analyzer pre-configured with clippy
+- gopls pre-configured
+- clang pre-configured
+- lua pre-configured
+- pyright pre-configured
+- tsserver pre-configured
+- jsonls pre-configured
 
 </td>
 </tr>
