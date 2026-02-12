@@ -53,7 +53,7 @@ termux-reload-settings
 ```
 
 > [!TIP]
-> Check the guide of changing font for your soecific linux.
+> Check the guide of changing font for your specific linux.
 
 ---
 
