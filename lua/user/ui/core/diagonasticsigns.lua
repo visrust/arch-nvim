@@ -53,7 +53,7 @@ vim.diagnostic.config({
     },
 })
 
-vim.o.updatetime = 250
+vim.o.updatetime = 100
 local diag_auto_enabled = true
 local diag_float_winid = nil
 
@@ -132,6 +132,26 @@ vim.api.nvim_create_autocmd("WinClosed", {
     callback = function(ev)
         if diag_float_winid and tonumber(ev.match) == diag_float_winid then
             diag_float_winid = nil
+        end
+    end,
+})
+
+-- Add this autocmd to your diagnostic group
+vim.api.nvim_create_autocmd("VimResized", {
+    group = diag_group,
+    callback = function()
+        -- Close the existing float if it exists
+        if diag_float_winid and vim.api.nvim_win_is_valid(diag_float_winid) then
+            vim.api.nvim_win_close(diag_float_winid, true)
+            diag_float_winid = nil
+            
+            -- Reopen if auto-float is enabled and there are diagnostics
+            if diag_auto_enabled and not vim.api.nvim_get_mode().mode:find("i") then
+                -- Small delay to let the UI settle after resize
+                vim.defer_fn(function()
+                    open_diagnostic_float()
+                end, 50)
+            end
         end
     end,
 })
