@@ -165,12 +165,6 @@ require('lazy').setup({
             commit = '9fbed13',
         },
         {
-            'lukas-reineke/indent-blankline.nvim',
-            main = 'ibl',
-            commit = '005b560',
-            event = { 'BufReadPost', 'BufNewFile' },
-        },
-        {
             'goolord/alpha-nvim',
             commit = '3979b01',
             event = 'VimEnter',
@@ -341,30 +335,13 @@ require('lazy').setup({
             event = 'VeryLazy'
         },
         -- ===========================
-        -- AI Completion
-        -- ===========================
-        -- {
-        --     "monkoose/neocodeium",
-        --     event = "InsertEnter",
-        --     config = function()
-        --         local neocodeium = require("neocodeium")
-        --         neocodeium.setup()
-        --         vim.keymap.set("i", "<A-f>", neocodeium.accept)
-        --         vim.keymap.set("i", "<A-w>", neocodeium.accept_word)
-        --         vim.keymap.set("i", "<A-l>", neocodeium.accept_line)
-        --         vim.keymap.set("i", "<A-n>", neocodeium.cycle_or_complete)
-        --         vim.keymap.set("i", "<A-p>", function() neocodeium.cycle_or_complete(-1) end)
-        --         vim.keymap.set("i", "<A-c>", neocodeium.clear)
-        --     end,
-        -- },
-        --
-        -- ===========================
         -- Session Management
         -- ===========================
         {
-            'stevearc/resession.nvim',
+            'steavearc/resession.nvim',
             commit = 'cc819b0',
             lazy = true,
+
         },
 
         -- ===========================
@@ -495,19 +472,6 @@ require('lazy').setup({
         }
     },
 })
-
--- ===============================
--- 🌈 Theme adaptation
--- ===============================
--- vim.api.nvim_create_autocmd('ColorScheme', {
---     callback = function()
---         local normal_bg = vim.api.nvim_get_hl(0, { name = 'Normal' }).bg or '#1e1e2e'
---         local accent = vim.api.nvim_get_hl(0, { name = 'String' }).fg or '#89b4fa'
---         vim.api.nvim_set_hl(0, 'LazyButtonActive', { fg = normal_bg, bg = accent, bold = true })
---         vim.api.nvim_set_hl(0, 'LazyProgressDone', { fg = accent })
---     end,
--- })
-
 -- ============================
 -- Batch Control Commands
 -- ============================

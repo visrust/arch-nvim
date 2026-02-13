@@ -34,15 +34,20 @@ vim.opt.sidescrolloff = 8
 vim.opt.smartindent = true
 
 vim.opt.backspace = { "indent", "eol", "start" }
--- vim.opt.spell = true
--- vim.opt.spelllang = "en_us"
-
-
-
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "'"
+
+-- Folding
+-- Use treesitter for folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+-- Keep most folds open by default when opening a file
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldnestmax = 10
+
 
 
 -- Auto-fix with first suggestion
