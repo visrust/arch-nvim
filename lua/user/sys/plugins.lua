@@ -73,16 +73,18 @@ require('lazy').setup({
             commit = '5bfcc89',
             event = { 'BufReadPre', 'BufNewFile' },
         },
-        { 'onsails/lspkind-nvim',
+        {
+            'onsails/lspkind-nvim',
             commit = 'c7274c4',
-            lazy = true },
+            lazy = true
+        },
         {
             'SmiteshP/nvim-navic',
             commit = 'f5eba19',
             lazy = true,
             dependencies = {
                 'neovim/nvim-lspconfig',
-                commit = "5bfcc89",
+                commit = '5bfcc89',
             },
         },
         {
@@ -338,7 +340,7 @@ require('lazy').setup({
         -- Session Management
         -- ===========================
         {
-            'steavearc/resession.nvim',
+            'stevearc/resession.nvim',
             commit = 'cc819b0',
             lazy = true,
 
@@ -387,7 +389,6 @@ require('lazy').setup({
             commit = '5da1b76',
         },
     },
-
     -- ============================
     -- Configuration
     -- ============================
@@ -400,12 +401,12 @@ require('lazy').setup({
 
     install = {
         missing = true,
-        colorscheme = { 'catppuccin' }, -- Fallback colorscheme during install
+        colorscheme = { 'habamax' }, -- Use default Neovim colorscheme (no dependencies)
     },
 
     rocks = {
-        enabled = false,   -- unnecessary for now
-        hererocks = false, -- use system one
+        enabled = false,
+        hererocks = false,
     },
 
     checker = {
@@ -416,7 +417,7 @@ require('lazy').setup({
 
     change_detection = {
         enabled = false,
-        notify = false, -- Less noise
+        notify = false,
     },
 
     performance = {
@@ -441,9 +442,8 @@ require('lazy').setup({
     },
 
     defaults = {
-        pin = true,
-        -- lazy = true, -- Make all plugins lazy by default
-        -- version = false,
+        lazy = false, -- FIX #1: Don't make everything lazy by default
+        version = false,
     },
 
     ui = {
@@ -453,60 +453,22 @@ require('lazy').setup({
         title = '   Lazy Plugin Manager ',
         backdrop = 70,
         icons = {
-            cmd        = '󰘳 ', -- command / terminal
-            config     = '󰒓 ', -- config / settings
-            event      = '󰚌 ', -- events / hooks
-            ft         = '󰈙 ', -- filetype
-            init       = '󰒓 ', -- init / setup
-            import     = '󰋺 ', -- import / module
-            keys       = '󰌌 ', -- keybindings
-            lazy       = '󰒲 ', -- lazy.nvim (kept)
-            loaded     = '󰄬 ', -- check / loaded
-            not_loaded = '󰄱 ', -- close / disabled
-            plugin     = '󰂖 ', -- plugin / package
-            runtime    = '󰆦 ', -- runtime / engine
-            source     = '󰉋 ', -- source / repo
-            start      = '󰐊 ', -- start / play
-            task       = '󰆕 ', -- task / todo
+            cmd        = '󰘳 ',
+            config     = '󰒓 ',
+            event      = '󰚌 ',
+            ft         = '󰈙 ',
+            init       = '󰒓 ',
+            import     = '󰋺 ',
+            keys       = '󰌌 ',
+            lazy       = '󰒲 ',
+            loaded     = '󰄬 ',
+            not_loaded = '󰄱 ',
+            plugin     = '󰂖 ',
+            runtime    = '󰆦 ',
+            source     = '󰉋 ',
+            start      = '󰐊 ',
+            task       = '󰆕 ',
             list       = { '󰬪', '󰬜', '󰬐', '󰬅' },
         }
     },
 })
--- ============================
--- Batch Control Commands
--- ============================
-vim.api.nvim_create_user_command('LazyInstallBatch', function(opts)
-    local count = tonumber(opts.args) or 5
-    vim.notify('Installing ' .. count .. ' plugins at a time...', vim.log.levels.INFO)
-    local lazy_config = require('lazy.core.config')
-    local original = lazy_config.options.concurrency
-    lazy_config.options.concurrency = count
-    require('lazy').install({ wait = true })
-    lazy_config.options.concurrency = original
-end, { nargs = '?' })
-
-vim.api.nvim_create_user_command('LazyUpdateBatch', function(opts)
-    local count = tonumber(opts.args) or 5
-    vim.notify('Updating ' .. count .. ' plugins at a time...', vim.log.levels.INFO)
-    local lazy_config = require('lazy.core.config')
-    local original = lazy_config.options.concurrency
-    lazy_config.options.concurrency = count
-    require('lazy').update({ wait = true })
-    lazy_config.options.concurrency = original
-end, { nargs = '?' })
-
-vim.api.nvim_create_user_command('LazySyncBatch', function(opts)
-    local count = tonumber(opts.args) or 5
-    vim.notify('Syncing ' .. count .. ' plugins at a time...', vim.log.levels.INFO)
-    local lazy_config = require('lazy.core.config')
-    local original = lazy_config.options.concurrency
-    lazy_config.options.concurrency = count
-    require('lazy').sync({ wait = true })
-    lazy_config.options.concurrency = original
-end, { nargs = '?' })
-
-vim.api.nvim_create_user_command('LazySetBatch', function(opts)
-    local count = tonumber(opts.args) or 5
-    require('lazy.core.config').options.concurrency = count
-    vim.notify('Batch size set to: ' .. count, vim.log.levels.INFO)
-end, { nargs = 1 })
