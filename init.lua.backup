@@ -1,3 +1,4 @@
+require('user.sys.plugins')
 -- require("user.profiler")
 vim.g.loaded_python_provider = 0
 vim.g.loaded_ruby_provider = 0
@@ -60,7 +61,7 @@ load_stages()
 -- =========================================================
 -- 3. Post-init
 -- =========================================================
-vim.cmd.colorscheme('tokyonight-night')
+vim.cmd.colorscheme('catppuccin-frappe')
 
 
 local function safe_cursor_line_fix()
