@@ -25,7 +25,7 @@ lspconfig.rust_analyzer.setup({
             },
 
             procMacro = {
-                enable = false, -- For termux optimization
+                enable = true, -- For termux optimization
             },
 
             files = {
@@ -46,6 +46,6 @@ lspconfig.rust_analyzer.setup({
     },
 })
 
-vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
-    return vim.NIL
-end
+-- vim.lsp.handlers["workspace/diagnostic/refresh"] = function(_, _, ctx)
+--     return vim.NIL
+-- end

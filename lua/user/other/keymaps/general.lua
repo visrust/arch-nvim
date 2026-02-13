@@ -72,4 +72,4 @@ map('n', '<leader>lls', '<cmd>Lazy sync<cr>', { desc = 'Lazy sync' })
 -- Info
 map('n', '<leader>lsi', '<cmd>LspInfo<cr>', { desc = 'Lsp Info' })
 map('n', '<leader>lsl', '<cmd>LspLog<cr>', { desc = 'Lsp Log' })
-map('n', '<leader>lsr', '<cmd>LspRestart<cr>', { desc = 'Lsp Log' })
+map('n', '<leader>lsr', '<cmd>LspRestart<cr>', { desc = 'Lsp Re-Start' })

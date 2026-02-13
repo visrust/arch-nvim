@@ -1,5 +1,4 @@
 local o = vim.o
-vim.opt.cmdheight=0
 vim.o.number = true
 vim.o.relativenumber = false
 o.cursorline = true
