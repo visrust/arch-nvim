@@ -1,9 +1,9 @@
 -- UI & Display
-vim.o.number = false
+vim.o.number = true
 vim.o.relativenumber = false
 vim.o.cursorline = true
 vim.o.termguicolors = true
-vim.o.signcolumn = "no"
+vim.o.signcolumn = "yes"
 vim.o.showtabline = 2
 vim.o.scrolloff = 8
 vim.o.sidescrolloff = 8

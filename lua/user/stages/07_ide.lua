@@ -5,8 +5,8 @@ end
 
 -- ide 
 require('user.config.ide.ide.module_require.autosave')
+require('user.config.ide.ide.treesitter')
 defer('user.config.ide.ide.module_require.run', 200)
-defer('user.config.ide.ide.treesitter', 50)
 defer('user.config.ide.ide.toggleterm', 50)
 defer('user.config.ide.ide.showkey', 200)
 defer('user.config.ide.ide.whkey', 100)

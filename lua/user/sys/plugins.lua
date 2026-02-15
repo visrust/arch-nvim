@@ -198,7 +198,7 @@ require('lazy').setup({
             'nvim-treesitter/nvim-treesitter',
             commit = '42fc28b',
             build = ':TSUpdate',
-            event = { 'BufReadPost', 'BufNewFile' },
+            event = { 'BufReadPre', 'BufNewFile' },
         },
 
         -- ===========================

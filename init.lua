@@ -142,7 +142,7 @@ local function apply_diag_hls()
             fg = hl.fg,
             sp = hl.fg,
             bold = true,
-            underline = false,
+            underline = true,
             -- standout = true,
         })
     end

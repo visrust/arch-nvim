@@ -68,14 +68,6 @@ end
 -- ============================================================================
 -- LAZY TREESITTER SETUP
 -- ============================================================================
-
--- Delay treesitter initialization until truly needed
-local treesitter_loaded = false
-
-local function load_treesitter()
-    if treesitter_loaded then return end
-    treesitter_loaded = true
-    
     -- Debug notification
     vim.notify("Treesitter loaded!", vim.log.levels.INFO)
     
@@ -129,31 +121,6 @@ local function load_treesitter()
         -- Folding: DISABLED (use native folding)
         fold = { enable = false },
     })
-end
-
--- ============================================================================
--- LAZY LOADING TRIGGERS
--- ============================================================================
-
--- Only load treesitter when actually editing (not just viewing)
-local lazy_events = {
-    "InsertEnter",
-    "CursorHold",
-}
-
-local loaded_once = false
-
-for _, event in ipairs(lazy_events) do
-    api.nvim_create_autocmd(event, {
-        once = true,
-        callback = function()
-            if not loaded_once then
-                loaded_once = true
-                vim.defer_fn(load_treesitter, 50) -- Small delay to avoid blocking
-            end
-        end,
-    })
-end
 
 -- ============================================================================
 -- STATUS COMMAND (Add before textobjects command)
@@ -166,7 +133,6 @@ api.nvim_create_user_command('TreesitterStatus', function()
     
     local status = {}
     table.insert(status, string.format("File size: %.1f KB", size_kb))
-    table.insert(status, string.format("Treesitter loaded: %s", treesitter_loaded and "YES" or "NO"))
     table.insert(status, "")
     
     if size > FILESIZE.DISABLE_HEAVY then

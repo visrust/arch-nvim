@@ -1,7 +1,53 @@
+vim.opt.signcolumn = "yes"
+
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN]  = " ",
+      [vim.diagnostic.severity.HINT]  = "󰌵 ",
+      [vim.diagnostic.severity.INFO]  = " ",
+    },
+  },
+
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  virtual_text = false, -- cleaner look (recommended)
+})
+
+local diag_float = nil
+
+vim.keymap.set("n", "gl", function()
+  -- If float exists and is valid → close it
+  if diag_float and vim.api.nvim_win_is_valid(diag_float) then
+    vim.api.nvim_win_close(diag_float, true)
+    diag_float = nil
+    return
+  end
+
+  -- Otherwise open new float
+  diag_float = vim.diagnostic.open_float(nil, {
+    scope = "line",      -- only current line
+    border = "rounded",
+    source = "if_many",  -- show source only if multiple
+    focusable = true,
+  })
+end, { desc = "Toggle line diagnostics" })
+
+vim.api.nvim_create_autocmd("CursorMoved", {
+  callback = function()
+    if diag_float and vim.api.nvim_win_is_valid(diag_float) then
+      vim.api.nvim_win_close(diag_float, true)
+      diag_float = nil
+    end
+  end,
+})
+
 require("tiny-inline-diagnostic").setup({
     -- Choose a preset style for diagnostic appearance
     -- Available: "modern", "classic", "minimal", "powerline", "ghost", "simple", "nonerdfont", "amongus"
-    preset = "classic",
+    preset = "modern",
 
     -- Make diagnostic background transparent
     transparent_bg = false,
@@ -32,13 +78,13 @@ require("tiny-inline-diagnostic").setup({
         },
 
         -- Display the diagnostic code of diagnostics (e.g., "F401", "no-dupe-args")
-        show_code = true,
+        show_code = false,
 
         -- Use icons from vim.diagnostic.config instead of preset icons
-        use_icons_from_diagnostic = false,
+        use_icons_from_diagnostic = true,
 
         -- Color the arrow to match the severity of the first diagnostic
-        set_arrow_to_diag_color = false,
+        set_arrow_to_diag_color = true,
 
 
         -- Throttle update frequency in milliseconds to improve performance
@@ -47,7 +93,7 @@ require("tiny-inline-diagnostic").setup({
         throttle = 20,
 
         -- Minimum number of characters before wrapping long messages
-        softwrap = 45,
+        softwrap = 30,
 
         -- Control how diagnostic messages are displayed
         -- NOTE: When using display_count = true, you need to enable multiline diagnostics with multilines.enabled = true
@@ -61,7 +107,7 @@ require("tiny-inline-diagnostic").setup({
 
         -- Settings for multiline diagnostics
         multilines = {
-            enabled = true,           -- Enable support for multiline diagnostic messages
+            enabled = false,           -- Enable support for multiline diagnostic messages
             always_show = false,       -- Always show messages on all lines of multiline diagnostics
             trim_whitespaces = true,  -- Remove leading/trailing whitespace from each line
             tabstop = 4,               -- Number of spaces per tab when expanding tabs
@@ -69,15 +115,15 @@ require("tiny-inline-diagnostic").setup({
           },
 
         -- Show all diagnostics on the current cursor line, not just those under the cursor
-        show_all_diags_on_cursorline = true,
+        show_all_diags_on_cursorline = false,
 
         -- Only show diagnostics when the cursor is directly over them, no fallback to line diagnostics
-        show_diags_only_under_cursor = false,
+        show_diags_only_under_cursor = true,
 
         -- Display related diagnostics from LSP relatedInformation
         show_related = {
-            enabled = true,           -- Enable displaying related diagnostics
-            max_count = 4,             -- Maximum number of related diagnostics to show per diagnostic
+            enabled = false,           -- Enable displaying related diagnostics
+            max_count = 0,             -- Maximum number of related diagnostics to show per diagnostic
         },
 
         -- Enable diagnostics display in insert mode
@@ -95,8 +141,8 @@ require("tiny-inline-diagnostic").setup({
 
         -- Break long messages into separate lines
         break_line = {
-            enabled = false,           -- Enable automatic line breaking
-            after = 60,                -- Number of characters before inserting a line break
+            enabled = true,           -- Enable automatic line breaking
+            after = 30,                -- Number of characters before inserting a line break
         },
 
         -- Custom function to format diagnostic messages
@@ -135,4 +181,5 @@ require("tiny-inline-diagnostic").setup({
     },
 })
 
-map('n', 'gl', '<cmd>TinyInlineDiag toggle<cr>')
+map('n', ',d', '<cmd>TinyInlineDiag toggle<cr>')
+

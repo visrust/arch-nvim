@@ -62,7 +62,7 @@ load_stages()
 -- =========================================================
 -- 3. Post-init
 -- =========================================================
-vim.cmd.colorscheme('catppuccin-frappe')
+vim.cmd.colorscheme('nightfox')
 
 
 local function safe_cursor_line_fix()
@@ -119,13 +119,19 @@ local function apply_diag_hls()
     })
 
     -- Base group
-    vim.api.nvim_set_hl(0, 'DiagnosticUnnecessary', { link = 'DiagnosticWarn' })
+    vim.api.nvim_set_hl(0, 'DiagnosticUnnecessary', {
+        link = 'DiagnosticWarn',
+        bold = true,
+        -- standout = true,
+    })
 
     -- Explicitly disable underline
     vim.api.nvim_set_hl(0, 'DiagnosticUnderlineUnnecessary', {
         underline = true,
         nocombine = true,
         undercurl = false,
+        bold = true,
+        -- standout = true,
         sp = 'NONE',
     })
 
@@ -136,7 +142,7 @@ local function apply_diag_hls()
             fg = hl.fg,
             sp = hl.fg,
             bold = true,
-            underline = true,
+            underline = false,
             -- standout = true,
         })
     end
