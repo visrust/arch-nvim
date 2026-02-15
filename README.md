@@ -1,288 +1,310 @@
-# 🦀 Arch Nvim
+# 🦀 arch-nvim
+
+> The beautiful neovim configuration that just works for any programmer. And is maintained actively.
 
 <div align="center">
 
-### **🦀 Arch Nvim is a Neovim configuration that aims to provide an IDE-like experience while preserving Neovim’s minimalism. Supports multiple languages out of the box, promotes a cleaner code culture, and enables smarter, less noisy coding.**
+![arch-nvim Banner](https://github.com/user-attachments/assets/e8877dab-af8d-4949-88aa-44d6683205d7)
 
-*Stop configuring. Start coding.*
+[![Version](https://img.shields.io/badge/version-v1.0-blue.svg)](https://github.com/visrust/arch-nvim/releases/tag/v1.0)
+[![Neovim](https://img.shields.io/badge/Neovim-0.9+-green.svg)](https://neovim.io)
+[![License](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
+[![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen.svg)](https://github.com/visrust/arch-nvim)
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Neovim](https://img.shields.io/badge/neovim-0.10+-green.svg)](https://neovim.io)
-[![Platform](https://img.shields.io/badge/platform-Linux%20|%20macOS%20|%20Termux-lightgrey.svg)]()
-
-**[🚀 Quick Start](#-quick-start)** • **[📸 Screenshots](#-see-it-in-action)** • **[✨ What's Inside](#-whats-inside)**
+[Features](#-features) • [Installation](#-installation) • [Screenshots](#-screenshots) • [Keymaps](KEYMAPS.md) • [Documentation](#-documentation)
 
 </div>
 
 ---
 
-## 🖥️The everywhere IDE 
+## ✨ Features
 
-<div align="center">
+### 🎨 Beautiful & Modern UI
+- **56 carefully curated plugins** for optimal performance
+- Multiple premium themes (TokyoNight, Catppuccin, Rose Pine, Nightfox)
+- Elegant bufferline with `nvim-cokeline`
+- Stunning statusline powered by `lualine.nvim`
+- Alpha dashboard for quick access
 
-![Screenshot_20260208_085859](https://github.com/user-attachments/assets/e8877dab-af8d-4949-88aa-44d6683205d7)
-![Screenshot_20260208_090033](https://github.com/user-attachments/assets/a1cd2cd8-d9eb-4d04-9fd4-2c03ec12ab49)
-![Screenshot_20260208_084928](https://github.com/user-attachments/assets/4c91c9ee-75a7-49f9-957b-02eb95d90314)
+### 🚀 Productivity Powerhouse
+- **20 LSP servers** pre-configured for multiple languages
+- Lightning-fast fuzzy finding with `fzf-lua`
+- Advanced completion with `blink.cmp`
+- Integrated debugging with `nvim-dap`
+- Smart code navigation with `leap.nvim`
+- Session management with `resession.nvim`
 
-![Screenshot_20260208_090241](https://github.com/user-attachments/assets/d21c224f-bc23-4159-bad5-13637cfca9dd)
+### 🛠️ Developer Experience
+- Git integration via `lazygit.nvim`
+- File management with `oil.nvim` and `yazi.nvim`
+- Terminal integration with `toggleterm.nvim`
+- Auto-pairs, surround operations, and multi-cursor editing
+- Code formatting with `conform.nvim`
+- Comprehensive snippet support
 
-![Screenshot_20260208_090137](https://github.com/user-attachments/assets/1a4a98f0-a725-447e-9415-724f756ec144)
-![Screenshot_20260208_085632](https://github.com/user-attachments/assets/eee31bca-5a46-4fdd-87e0-0b7a89a8a2ea)
+### 🎯 Language Support
 
-</div>
+#### High-Level Languages
+- Python (pyright)
+- Lua (lua_ls)
+
+#### Low-Level Languages
+- C/C++ (clangd)
+- Rust (rust-analyzer)
+- Zig (zls)
+- Assembly (asm-lsp)
+- CMake
+
+#### Web Development
+- TypeScript/JavaScript (ts_ls)
+- HTML, CSS
+- Go (gopls)
+- PHP (phpactor)
+
+#### Game Development
+- GDScript (Godot_ls)
+
+#### Utilities & Documentation
+- Bash, Docker, JSON, YAML
+- Markdown (marksman, vale)
+- Vim script
 
 ---
-## Download JetBrains Nerd font 
 
-```sh 
-curl -OL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.tar.xz
-```
+## 📦 Installation
 
-### Open it 
-```sh 
-tar -xf JetBrainsMono.tar.xz
-```
+### Prerequisites
 
-### Setup for termux 
+- Neovim ≥ 0.9.0
+- Git
+- A [Nerd Font](https://www.nerdfonts.com/) (recommended: JetBrainsMono Nerd Font)
+- Node.js (for some LSP servers)
+- Ripgrep (for fzf-lua)
 
-```sh 
-mkdir -p ~/.termux/
-mv ~/.termux/font.ttf ~/.termux/prev_font.ttf.backup
-cp JetBrainsMonoNerdFont-Medium.ttf ~/.termux/font.ttf
-termux-reload-settings
-```
-
-> [!TIP]
-> Check the guide of changing font for your specific linux.
-
----
-
-## 🚀 Quick stable download
-
-> [!WARN]
-> Without clang or gcc the treesitters wont compile 
-```sh 
-apt install clang 
-```
+### Quick Install
 
 ```bash
-# Clone it
-mkdir -p ~/.config/archn && cd ~/.config/archn
-git clone --branch v1.0 --depth=1 https://github.com/visrust/arch-nvim.git .
+# Backup your existing config
+mv ~/.config/nvim ~/.config/nvim.backup
 
-echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.bashrc && source ~/.bashrc
-echo "alias n='NVIM_APPNAME=archn nvim'" >> ~/.zshrc && source ~/.zshrc
+# Clone arch-nvim (stable v1.0)
+git clone --depth 1 --branch v1.0 https://github.com/visrust/arch-nvim.git ~/.config/nvim
 
-# Launch it
-NVIM_APPNAME=archn nvim
+# Launch Neovim
+nvim
 ```
 
-> [!IMPORTANT]
-> You will need avout 200 mbs of mobile data to setup the plugins. Don't worry once setuped you can every time clone the same binary to use in other arch-nvim based configurations by copying ~/.local/share/nvim/lazy/
+The plugin manager will automatically install all plugins on first launch.
+
+### Manual Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/visrust/arch-nvim.git ~/.config/nvim
+```
+
+2. Checkout the stable release:
+```bash
+cd ~/.config/nvim
+git checkout v1.0
+```
+
+3. Launch Neovim and let plugins install:
+```bash
+nvim
+```
 
 ---
 
-## ✨ What's Inside
+## 📸 Screenshots
 
-<table>
-<tr>
-<td width="50%">
+### Dashboard & Workflow
+![Dashboard](https://github.com/user-attachments/assets/eee31bca-5a46-4fdd-87e0-0b7a89a8a2ea)
 
-### ⚡ **Speed**
-- **Less than 250ms** startup on desktop
-- **~300ms** on Termux (mobile)
-- **63 plugins**, zero bloat
-- Lazy loading done right
+### Coding Experience
+![Coding](https://github.com/user-attachments/assets/a1cd2cd8-d9eb-4d04-9fd4-2c03ec12ab49)
 
-</td>
-<td width="50%">
+### File Navigation
+![Navigation](https://github.com/user-attachments/assets/4c91c9ee-75a7-49f9-957b-02eb95d90314)
 
-### 🦀 **Modern-Language-First**
-- rust-analyzer pre-configured with clippy
-- gopls pre-configured
-- clang pre-configured
-- lua pre-configured
-- pyright pre-configured
-- tsserver pre-configured
-- jsonls pre-configured
+### Fuzzy Finding
+![FZF](https://github.com/user-attachments/assets/d21c224f-bc23-4159-bad5-13637cfca9dd)
 
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 🎨 **5 Theme Collections**
-- Catppuccin (4 variants)
-- Tokyo Night (4 variants)
-- Rose Pine (3 variants)
-- Nightfox (7 variants)
-- Gruvbox (2 variants)
-
-Switch with `:SGT <theme>`
-
-</td>
-<td width="50%">
-
-### 📱 **Termux Native**
-- Built & tested on mobile
-- Performance tweaks included
-- Full feature parity
-- No desktop-only compromises
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-### 🛠️ **20 LSP Servers**
-Rust • C/C++ • Python • Go • TS/JS • Lua • Zig • Bash • Markdown • Docker • JSON • YAML • HTML • CSS • PHP • GDScript • Vim • ASM • CMake • Vale
-
-</td>
-<td width="50%">
-
-### 💡 **Smart Tools**
-- FzfLua fuzzy finding
-- Oil.nvim + Yazi file nav
-- Blink.cmp completion
-- Leap.nvim precision jumps
-- Lazygit integration
-- Trouble diagnostics
-
-</td>
-</tr>
-</table>
+### Integrated Terminal
+![Terminal](https://github.com/user-attachments/assets/1a4a98f0-a725-447e-9415-724f756ec144)
 
 ---
 
-## 🎯 Why Arch Nvim?
+## 📚 Documentation
 
-| Arch | Typical Configs |
-|----------|-----------------|
-| ⚡ <400ms startup | 🐌 2-5 seconds |
-| 📱 Termux tested | ❌ Often broken |
-| 🎨 5 curated theme sets | 🎲 Scattered themes |
-| 🦀 Rust pre-configured | 🔧 Manual setup |
-| 🎯 63 handpicked plugins | 📦 100+ bloat |
-| 🚀 Ready to use | ⏳ Endless tweaking |
+### 📊 Configuration Overview
 
-**Perfect for developers who want to code, not configure.**
+| Metric | Count |
+|--------|------:|
+| **Unique Plugins** | 56 |
+| **LSP Servers** | 20 |
+| **Keybindings** | 36+ |
+| **Functions** | 56 |
+| **Themes** | 4 |
+
+### 📖 Detailed Documentation
+
+- **[Keybinding Reference](KEYMAPS.md)** - Complete list of all keyboard shortcuts
+- **[Plugin Inventory](01_PLUGINS.md)** - All installed plugins and their purposes
+- **[LSP Servers](04_LSP_SERVERS.md)** - Language server configurations
+- **[Duplicate Detection](03_DUPLICATES.md)** - Configuration audit results
+
+### ⚙️ Configuration Structure
+
+```
+arch-nvim/
+├── lua/
+│   └── user/
+│       ├── config/        # Plugin configurations
+│       │   ├── dap/       # Debugger setup
+│       │   ├── ide/       # IDE features
+│       │   ├── server/    # LSP servers
+│       │   └── tools/     # Utility tools
+│       ├── sys/           # System configurations
+│       ├── ui/            # UI components
+│       └── other/         # Miscellaneous
+└── init.lua               # Entry point
+```
 
 ---
 
-## 🎨 Try Different Looks
+## ⌨️ Quick Reference
 
+> For the complete keybinding reference, see [KEYMAPS.md](KEYMAPS.md)
+
+### Essential Shortcuts
+
+| Key | Action | Mode |
+|-----|--------|------|
+| `<Tab>` | Next buffer | Normal |
+| `<leader>hf` | Help tags (Fuzzy) | Normal |
+| `<leader>zz` | Run code | Normal |
+| `<leader>dd` | Debug | Normal |
+| `m` / `M` | Leap forward/backward | Normal |
+| `<leader>ut` | Toggle Undotree | Normal |
+
+### Leader Key Groups
+
+- `<leader>r*` - Replace operations
+- `<leader>l*` - LSP operations
+- `<leader>d*` - Debug operations
+- `<leader>g*` - Git operations
+- `gp*` - Goto preview operations
+
+---
+
+## 🔧 Customization
+
+### Changing the Theme
+
+Edit `lua/user/sys/plugins.lua` and modify the colorscheme section:
+
+```lua
+-- Available themes: tokyonight, catppuccin, rose-pine, nightfox
+vim.cmd([[colorscheme tokyonight]])
+```
+
+### Adding LSP Servers
+
+1. Create a new file in `lua/user/config/server/<category>/`
+2. Configure the LSP using `lspconfig`
+3. The server will be automatically loaded
+
+### Modifying Keybindings
+
+Edit keybindings in:
+- `lua/user/sys/mappings.lua` - Core mappings
+- `lua/user/other/keymaps/general.lua` - General keymaps
+- Individual plugin configs for plugin-specific maps
+
+---
+
+## 🐛 Troubleshooting
+
+### Plugins Not Installing
+
+```bash
+# Remove plugin cache
+rm -rf ~/.local/share/nvim
+
+# Restart Neovim
+nvim
+```
+
+### LSP Not Working
+
+1. Ensure the language server is installed:
+```bash
+:Mason
+```
+
+2. Check LSP status:
 ```vim
-:SGT catppuccin-mocha    " Cozy dark theme
-:SGT rose-pine           " Elegant minimalism  
-:SGT tokyonight-night    " Vibrant colors
-:SGT nightfox            " Natural palette
-:SGT gruvbox             " Retro warmth
+:LspInfo
 ```
 
-Press `<Space>` to see all keybindings via Which-Key!
+### Performance Issues
 
----
-
-## 🛠️ Dependencies
-
-**Essential (5 tools):**
-```bash
-fzf ripgrep fd yazi lazygit
-```
-
-**Recommended:**
-```bash
-bat git-delta nodejs python3 gcc
-```
-
-**LSP servers:** Install manually as needed (no Mason). You control your toolchain.
-
-<details>
-<summary><b>📦 Installation Commands</b></summary>
-
-```bash
-# Termux
-pkg install fzf ripgrep fd yazi lazygit git bat git-delta nodejs python clang
-
-# Debian/Ubuntu
-sudo apt install fzf ripgrep fd-find yazi lazygit git bat git-delta nodejs python3 build-essential
-
-# Arch Linux
-sudo pacman -S fzf ripgrep fd yazi lazygit git bat git-delta nodejs python gcc
-
-# macOS
-brew install fzf ripgrep fd yazi lazygit git bat git-delta node python
-```
-
-</details>
+- Check for duplicate plugins in [03_DUPLICATES.md](03_DUPLICATES.md)
+- Disable unused LSP servers
+- Consider using lazy loading for heavy plugins
 
 ---
 
 ## 🤝 Contributing
 
-Found a bug? Want to add a feature? PRs welcome!
+Contributions are welcome! Please:
 
-**Ideas:** Add LSP servers • Enhance themes • Improve docs • Fix bugs • Add snippets
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-[Read Contributing Guide](CONTRIBUTING.md)
+### Development Guidelines
+
+- Follow the existing configuration structure
+- Document new keybindings
+- Update KEYMAPS.md for new shortcuts
+- Test with multiple languages
 
 ---
 
-## 📚 Learn More
+## 📝 License
 
-<details>
-<summary><b>📁 Architecture Overview</b></summary>
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```
- lua
-└──  user
-    ├──  config
-    ├──  mini 
-    ├──  other
-    ├──  profiler.lua
-    ├──  snippets
-    ├──  stages
-    ├──  sys
-    └──  ui
-```
+---
 
-</details>
+## 💖 Acknowledgments
 
-<details>
-<summary><b>⌨️ Key Keybindings</b></summary>
+Special thanks to all the plugin authors and the Neovim community for making this configuration possible.
 
-| Key | Action |
-|-----|--------|
-| `<Space>` | Show space based mappings cheat sheet|
-| `<Space>fz` + pick `keymaps` | Show all keymaps via fuzzy |
-| `m` + 2 chars | Leap to location |
-| `-` | File explorer |
-| `K` | LSP hover |
-| `tt` | view low priority diagnostics of current line|
-| `<Space>f` based maps | Full fuzzy based maps|
-| `<Space>gl` | Lazygit |
-| `<Space>tf` | Toggle terminal |
+### Featured Plugins
 
-*Pro Tip* : Use fuzzy to search for keymaps easily
-</details>
+- [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+- [blink.cmp](https://github.com/saghen/blink.cmp)
+- [fzf-lua](https://github.com/ibhagwan/fzf-lua)
+- [nvim-dap](https://github.com/mfussenegger/nvim-dap)
+- [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim)
+- And 50+ more amazing plugins!
 
-<details>
-<summary><b>🗑️ Uninstall</b></summary>
+---
 
-```bash
-rm -rf ~/.config/archn/ ~/.local/share/archn/ ~/.local/state/archn/ ~/.cache/archn/
-```
+## 🌟 Star History
 
-</details>
+If you find this configuration helpful, please consider giving it a star! ⭐
 
 ---
 
 <div align="center">
 
-### Built with ❤️ by developers, for developers
+**Built with ❤️ for the Neovim community**
 
-**Stop configuring. Start coding.**
-
-[⭐ Star on GitHub](https://github.com/visrust/arch-nvim) • [🐛 Report Issues](https://github.com/visrust/arch-nvim/issues) • [💬 Discussions](https://github.com/visrust/arch-nvim/discussions)
+[Report Bug](https://github.com/visrust/arch-nvim/issues) • [Request Feature](https://github.com/visrust/arch-nvim/issues)
 
 </div>
