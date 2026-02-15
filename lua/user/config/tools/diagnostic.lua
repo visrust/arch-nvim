@@ -118,7 +118,7 @@ require("tiny-inline-diagnostic").setup({
         show_all_diags_on_cursorline = false,
 
         -- Only show diagnostics when the cursor is directly over them, no fallback to line diagnostics
-        show_diags_only_under_cursor = true,
+        show_diags_only_under_cursor = false,
 
         -- Display related diagnostics from LSP relatedInformation
         show_related = {
