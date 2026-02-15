@@ -1,185 +1,232 @@
-vim.opt.signcolumn = "yes"
+local icons = { Error = ' ', Warn = ' ', Hint = '󰌶 ', Info = ' ' }
+--------------------------------------------------------------------------------
+-- DYNAMIC DIAGNOSTIC ECHO - Full Error Display with Cycling
+--------------------------------------------------------------------------------
+
+-- State management
+local echo_timer = vim.loop.new_timer()
+local current_diag_index = 1
+
+-- Helper: Get all diagnostics for current line (not just under cursor)
+local function get_line_diagnostics()
+    if not vim.api.nvim_buf_is_valid(0) then return {} end
+    local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+    return vim.diagnostic.get(0, { lnum = line })
+end
+
+-- Helper: Format diagnostic message (no truncation)
+local function format_message(msg)
+    msg = msg:gsub('\r\n', ' ')
+    msg = msg:gsub('\n', ' ')
+    msg = msg:gsub('\r', ' ')
+    msg = msg:gsub('\t', ' ')
+    msg = msg:gsub('%s+', ' ')
+    return vim.trim(msg)
+end
+
+-- Helper: Calculate required cmdheight for message
+local function calculate_cmdheight(display_text)
+    local screen_width = vim.o.columns
+    local usable_width = math.max(screen_width - 20, 50)
+    local text_width = vim.fn.strdisplaywidth(display_text)
+    local required_lines = math.ceil(text_width / usable_width)
+    return math.min(math.max(required_lines, 1), 10)
+end
+
+-- Helper: Count diagnostics by severity
+local function count_diagnostics(diags)
+    local counts = { Error = 0, Warn = 0, Info = 0, Hint = 0 }
+    local severity_map = { [1] = 'Error', [2] = 'Warn', [3] = 'Info', [4] = 'Hint' }
+    for _, d in ipairs(diags) do
+        local sev = severity_map[d.severity]
+        if sev then counts[sev] = counts[sev] + 1 end
+    end
+    return counts
+end
+
+-- Helper: Format summary (e.g., "+ ×2 Warn ×3 Hint")
+local function format_summary(counts, exclude_severity)
+    local parts = {}
+    local order = { 'Error', 'Warn', 'Info', 'Hint' }
+    for _, sev in ipairs(order) do
+        if counts[sev] > 0 and sev ~= exclude_severity then
+            table.insert(parts, string.format('×%d %s', counts[sev], sev))
+        end
+    end
+    if #parts > 0 then
+        return ' + ' .. table.concat(parts, ' ')
+    end
+    return ''
+end
+
+-- Main echo function
+local function dynamic_echo()
+    if not vim.api.nvim_buf_is_valid(0) then return end
+
+    local diags = get_line_diagnostics()
+
+    -- Reset if no diagnostics
+    if #diags == 0 then
+        current_diag_index = 1
+        if vim.o.cmdheight ~= 1 then
+            vim.o.cmdheight = 1
+        end
+        vim.api.nvim_echo({}, false, {})
+        return
+    end
+
+    -- Sort by severity (Error > Warn > Info > Hint)
+    table.sort(diags, function(a, b) return a.severity < b.severity end)
+
+    -- Ensure index is valid
+    if current_diag_index > #diags then
+        current_diag_index = 1
+    end
+
+    local d = diags[current_diag_index]
+    local severity_map = { [1] = 'Error', [2] = 'Warn', [3] = 'Info', [4] = 'Hint' }
+    local sev_name = severity_map[d.severity]
+    local hl = 'Diagnostic' .. sev_name
+    local icon = icons[sev_name]
+
+    -- Format the full message
+    local msg = format_message(d.message)
+    
+    -- Build display: icon + message
+    local display = icon .. ' ' .. msg
+
+    -- Add related diagnostics of same severity
+    local same_severity = vim.tbl_filter(function(diag)
+        return diag.severity == d.severity
+    end, diags)
+
+    if #same_severity > 1 then
+        for i, related in ipairs(same_severity) do
+            if i > 1 then
+                local related_msg = format_message(related.message)
+                display = display .. ' | ' .. related_msg
+            end
+        end
+    end
+
+    -- Count other diagnostics
+    local counts = count_diagnostics(diags)
+    local summary = format_summary(counts, sev_name)
+    
+    if summary ~= '' then
+        display = display .. summary
+    end
+
+    -- Calculate and set cmdheight
+    local required_height = calculate_cmdheight(display)
+    if vim.o.cmdheight ~= required_height then
+        vim.o.cmdheight = required_height
+    end
+
+    -- Display message
+    pcall(function()
+        vim.api.nvim_echo({ { display, hl } }, false, {})
+    end)
+end
+
+local safe_echo = vim.schedule_wrap(dynamic_echo)
+
+-- Trigger on cursor movement
+vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+    callback = function()
+        current_diag_index = 1
+        echo_timer:stop()
+        echo_timer:start(20, 0, safe_echo)
+    end,
+})
+
+-- Reset cmdheight when leaving buffer
+vim.api.nvim_create_autocmd('BufLeave', {
+    callback = function()
+        vim.schedule(function()
+            if vim.o.cmdheight ~= 1 then
+                vim.o.cmdheight = 1
+            end
+            current_diag_index = 1
+        end)
+    end,
+})
+
+-- Diagnostic configuration
+vim.opt.shortmess:append('AFWc')
 
 vim.diagnostic.config({
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = " ",
-      [vim.diagnostic.severity.WARN]  = " ",
-      [vim.diagnostic.severity.HINT]  = "󰌵 ",
-      [vim.diagnostic.severity.INFO]  = " ",
+    virtual_text = false,
+    underline = true,
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = icons.Error,
+            [vim.diagnostic.severity.WARN]  = icons.Warn,
+            [vim.diagnostic.severity.INFO]  = icons.Info,
+            [vim.diagnostic.severity.HINT]  = icons.Hint,
+        },
+        linehl = {
+            [vim.diagnostic.severity.ERROR] = 'DiagnosticLineError',
+            [vim.diagnostic.severity.WARN]  = 'DiagnosticLineWarn',
+            [vim.diagnostic.severity.INFO]  = 'DiagnosticLineInfo',
+            [vim.diagnostic.severity.HINT]  = 'DiagnosticLineHint',
+        },
     },
-  },
-
-  underline = true,
-  update_in_insert = false,
-  severity_sort = true,
-  virtual_text = false, -- cleaner look (recommended)
+    severity_sort = true,
+    update_in_insert = false,
 })
 
-local diag_float = nil
+-- Highlight settings
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineUnnecessary", { 
+    fg = "NONE",
+    bg = "NONE",
+    sp = "NONE",
+    undercurl = false,
+    underline = false,
+})
 
-vim.keymap.set("n", "gl", function()
-  -- If float exists and is valid → close it
-  if diag_float and vim.api.nvim_win_is_valid(diag_float) then
-    vim.api.nvim_win_close(diag_float, true)
-    diag_float = nil
-    return
-  end
+--------------------------------------------------------------------------------
+-- KEYMAPS
+--------------------------------------------------------------------------------
 
-  -- Otherwise open new float
-  diag_float = vim.diagnostic.open_float(nil, {
-    scope = "line",      -- only current line
-    border = "rounded",
-    source = "if_many",  -- show source only if multiple
-    focusable = true,
-  })
-end, { desc = "Toggle line diagnostics" })
-
-vim.api.nvim_create_autocmd("CursorMoved", {
-  callback = function()
-    if diag_float and vim.api.nvim_win_is_valid(diag_float) then
-      vim.api.nvim_win_close(diag_float, true)
-      diag_float = nil
+-- Cycle through diagnostics on current line
+vim.keymap.set('n', ',d', function()
+    local diags = get_line_diagnostics()
+    if #diags == 0 then
+        vim.notify("No diagnostics on current line", vim.log.levels.INFO)
+        return
     end
-  end,
-})
 
-require("tiny-inline-diagnostic").setup({
-    -- Choose a preset style for diagnostic appearance
-    -- Available: "modern", "classic", "minimal", "powerline", "ghost", "simple", "nonerdfont", "amongus"
-    preset = "modern",
+    current_diag_index = current_diag_index + 1
+    if current_diag_index > #diags then
+        current_diag_index = 1
+    end
 
-    -- Make diagnostic background transparent
-    transparent_bg = false,
+    dynamic_echo()
+end, { desc = "Cycle through line diagnostics" })
 
-    -- Make cursorline background transparent for diagnostics
-    transparent_cursorline = true,
+-- Jump to next/prev diagnostic
+vim.keymap.set('n', '<M-j>', function() 
+    vim.diagnostic.jump({count = 1})
+    current_diag_index = 1
+end, {desc = "Next diagnostic"})
 
-    -- Customize highlight groups for colors
-    -- Use Neovim highlight group names or hex colors like "#RRGGBB"
-    hi = {
-        error = "DiagnosticError",     -- Highlight for error diagnostics
-        warn = "DiagnosticWarn",       -- Highlight for warning diagnostics
-        info = "DiagnosticInfo",       -- Highlight for info diagnostics
-        hint = "DiagnosticHint",       -- Highlight for hint diagnostics
-        arrow = "NonText",             -- Highlight for the arrow pointing to diagnostic
-        background = "CursorLine",     -- Background highlight for diagnostics
-        mixing_color = "Normal",       -- Color to blend background with (or "None")
-    },
+vim.keymap.set('n', '<M-k>', function() 
+    vim.diagnostic.jump({count = -1})
+    current_diag_index = 1
+end, {desc = "Prev diagnostic"})
 
-    -- List of filetypes to disable the plugin for
-    disabled_ft = {},
-
-    options = {
-        -- Display the source of diagnostics (e.g., "lua_ls", "pyright")
-        show_source = {
-            enabled = false,           -- Enable showing source names
-            if_many = false,           -- Only show source if multiple sources exist for the same diagnostic
-        },
-
-        -- Display the diagnostic code of diagnostics (e.g., "F401", "no-dupe-args")
-        show_code = false,
-
-        -- Use icons from vim.diagnostic.config instead of preset icons
-        use_icons_from_diagnostic = true,
-
-        -- Color the arrow to match the severity of the first diagnostic
-        set_arrow_to_diag_color = true,
-
-
-        -- Throttle update frequency in milliseconds to improve performance
-        -- Higher values reduce CPU usage but may feel less responsive
-        -- Set to 0 for immediate updates (may cause lag on slow systems)
-        throttle = 20,
-
-        -- Minimum number of characters before wrapping long messages
-        softwrap = 30,
-
-        -- Control how diagnostic messages are displayed
-        -- NOTE: When using display_count = true, you need to enable multiline diagnostics with multilines.enabled = true
-        --       If you want them to always be displayed, you can also set multilines.always_show = true.
-        add_messages = {
-            messages = true,           -- Show full diagnostic messages
-            display_count = true,     -- Show diagnostic count instead of messages when cursor not on line
-            use_max_severity = false,  -- When counting, only show the most severe diagnostic
-            show_multiple_glyphs = true, -- Show multiple icons for multiple diagnostics of same severity
-        },
-
-        -- Settings for multiline diagnostics
-        multilines = {
-            enabled = false,           -- Enable support for multiline diagnostic messages
-            always_show = false,       -- Always show messages on all lines of multiline diagnostics
-            trim_whitespaces = true,  -- Remove leading/trailing whitespace from each line
-            tabstop = 4,               -- Number of spaces per tab when expanding tabs
-            severity = nil,            -- Filter multiline diagnostics by severity (e.g., { vim.diagnostic.severity.ERROR })
-          },
-
-        -- Show all diagnostics on the current cursor line, not just those under the cursor
-        show_all_diags_on_cursorline = false,
-
-        -- Only show diagnostics when the cursor is directly over them, no fallback to line diagnostics
-        show_diags_only_under_cursor = false,
-
-        -- Display related diagnostics from LSP relatedInformation
-        show_related = {
-            enabled = false,           -- Enable displaying related diagnostics
-            max_count = 0,             -- Maximum number of related diagnostics to show per diagnostic
-        },
-
-        -- Enable diagnostics display in insert mode
-        -- May cause visual artifacts; consider setting throttle to 0 if enabled
-        enable_on_insert = false,
-
-        -- Enable diagnostics display in select mode (e.g., during auto-completion)
-        enable_on_select = false,
-
-        -- Handle messages that exceed the window width
-        overflow = {
-            mode = "wrap",             -- "wrap": split into lines, "none": no truncation, "oneline": keep single line
-            padding = 2,               -- Extra characters to trigger wrapping earlier
-        },
-
-        -- Break long messages into separate lines
-        break_line = {
-            enabled = true,           -- Enable automatic line breaking
-            after = 30,                -- Number of characters before inserting a line break
-        },
-
-        -- Custom function to format diagnostic messages
-        -- Receives diagnostic object, returns formatted string
-        -- Example: function(diag) return diag.message .. " [" .. diag.source .. "]" end
-        format = nil,
-
-        -- Virtual text display priority
-        -- Higher values appear above other plugins (e.g., GitBlame)
-        virt_texts = {
-            priority = 2048,
-        },
-
-        -- Filter diagnostics by severity levels
-        -- Remove severities you don't want to display
-        severity = {
-            vim.diagnostic.severity.ERROR,
-            vim.diagnostic.severity.WARN,
-            vim.diagnostic.severity.INFO,
-            vim.diagnostic.severity.HINT,
-        },
-
-        -- Events that trigger attaching diagnostics to buffers
-        -- Default is {"LspAttach"}; change only if plugin doesn't work with your LSP setup
-        overwrite_events = nil,
-
-        -- Automatically disable diagnostics when opening diagnostic float windows
-        override_open_float = false,
-
-        -- Experimental options, subject to misbehave in future NeoVim releases
-        experimental = {
-          -- Make diagnostics not mirror across windows containing the same buffer
-          -- See: https://github.com/rachartier/tiny-inline-diagnostic.nvim/issues/127
-          use_window_local_extmarks = false,
-        },
-    },
-})
-
-map('n', ',d', '<cmd>TinyInlineDiag toggle<cr>')
-
+-- Open diagnostic float (catches cursor)
+vim.keymap.set('n', 'gl', function()
+    vim.diagnostic.open_float({
+        border = 'rounded',
+        focusable = true,
+        focus = true,
+        source = 'always',
+        severity_sort = true,
+        max_width = 100,
+        max_height = 30,
+        wrap = true,
+    })
+end, { desc = "Open diagnostic float" })
