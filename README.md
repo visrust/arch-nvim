@@ -88,8 +88,7 @@
 mv ~/.config/nvim ~/.config/nvim.backup
 
 # Clone arch-nvim (stable v1.0)
-git clone --depth 1 --branch main https://github.com/visrust/arch-nvim.git ~/.config/nvim
-
+git clone --depth 1 --branch v1.0 https://github.com/visrust/arch-nvim.git ~/.config/nvim
 # Launch Neovim
 nvim
 ```
