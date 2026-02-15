@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/badge/version-v1.0-blue.svg)](https://github.com/visrust/arch-nvim/releases/tag/v1.0)
 [![Neovim](https://img.shields.io/badge/Neovim-0.9+-green.svg)](https://neovim.io)
 [![License](https://img.shields.io/badge/license-MIT-purple.svg)](LICENSE)
-[![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen.svg)](https://github.com/visrust/arch-nvim)
+[![Maintained](https://img.shields.io/badge/maintained-no-brightgreen.svg)](https://github.com/visrust/arch-nvim)
 
 [Features](#-features) • [Installation](#-installation) • [Screenshots](#-screenshots) • [Keymaps](KEYMAPS.md) • [Documentation](#-documentation)
 
